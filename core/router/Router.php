@@ -53,7 +53,6 @@ class Router
             throw new RouterException("404! Route Not Found.");
         }
 
-
         if (is_callable($route->action)) {
 
             $action = $route->action;
@@ -62,7 +61,9 @@ class Router
             $controller = $route->action[0];
             $method = $route->action[1];
 
-            $controllerInstance = App::getInstance()->make($controller);
+            $app = App::getInstance();
+
+            $controllerInstance = $app->make($controller);
 
             try {
                 $action = [$controllerInstance, $method];

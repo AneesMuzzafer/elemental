@@ -53,13 +53,14 @@ class Container
             $name = $dependency->getName();
             $type = $dependency->getType();
 
+            if ($type === null) {
+                throw new \Exception("Failed to resolve class " . $key . ". " . $name . " is missing the type hint.");
+            }
+
             if ($type->getName() === App::class) {
                 return App::getInstance();
             }
 
-            if ($type === null) {
-                throw new \Exception("Failed to resolve class " . $key . ". " . $name . " is missing the type hint.");
-            }
 
             if ($type instanceof \ReflectionUnionType) {
                 throw new \Exception("Failed to resolve " . $key . ". " . $name . " is a union type and can't be instantiated.");
@@ -73,5 +74,49 @@ class Container
         }, $dependencies);
 
         return $reflection->newInstanceArgs($resolvedDependencies);
+    }
+
+    public function resolveMethod(array | callable $action)
+    {
+
+        if (!is_array($action)) {
+
+            $reflectionFunction = new \ReflectionFunction($action);
+            $parameters = $reflectionFunction->getParameters();
+
+            if (count($parameters) == 0) {
+
+                return $reflectionFunction->invoke();
+            }
+
+            $resolvedParameters = array_map(function ($parameter) {
+                $type = $parameter->getType();
+
+                return $this->make($type->getName());
+            }, $parameters);
+
+            return $reflectionFunction->invokeArgs($resolvedParameters);
+
+        } else {
+
+            $object = $action[0];
+            $method = $action[1];
+
+            $reflectionMethod = new \ReflectionMethod($object, $method);
+            $parameters = $reflectionMethod->getParameters();
+
+            if (count($parameters) == 0) {
+
+                return $reflectionMethod->invoke($object);
+            }
+
+            $resolvedParameters = array_map(function ($parameter) {
+                $type = $parameter->getType();
+
+                return $this->make($type->getName());
+            }, $parameters);
+
+            return $reflectionMethod->invokeArgs($object, $resolvedParameters);
+        }
     }
 }

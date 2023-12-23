@@ -2,10 +2,18 @@
 
 namespace App\Controllers;
 
+use App\Services\MailService;
+
 class TestController
 {
-    public function index()
+
+    public function __construct(MailService $mailService)
     {
-        return "Run from Controller";
+    }
+
+    public function index(MailService $mailService)
+    {
+        $msg = $mailService->send("Message from Test Controller");
+        return "Resolved from Index of Test Controller  - " . $msg;
     }
 }

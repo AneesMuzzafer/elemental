@@ -24,7 +24,8 @@ class HTTPEngine
 
         if (is_callable($controller)) {
 
-            $response->generate(call_user_func($controller));
+            $result = $this->app->resolveMethod($controller);
+            $response->generate($result);
         }
 
         return $response;
