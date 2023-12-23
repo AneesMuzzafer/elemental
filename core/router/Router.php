@@ -3,6 +3,7 @@
 namespace Core\Router;
 
 use Core\Exception\RouterException;
+use Core\Request\Request;
 
 class Router
 {
@@ -17,7 +18,9 @@ class Router
         "HEAD" => [],
     ];
 
-    private function __construct(){}
+    private function __construct()
+    {
+    }
 
     public function addRoute(string $method, Route $route)
     {
@@ -29,16 +32,29 @@ class Router
 
     public static function getInstance(): self
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
+        if (is_null(static::$instance)) {
+            static::$instance = new static();
         }
-        return self::$instance;
+        return static::$instance;
     }
 
     public function registerRoutes()
     {
         $path = str_replace("\\", "/", getcwd()) . "/app/routes.php";
         require_once $path;
+    }
+
+    public function getController(Request $request)
+    {
+        $method = $_SERVER["REQUEST_METHOD"];
+
+        foreach ($this->routes[$method] as $route) {
+            $path = array_key_exists("PATH_INFO", $_SERVER) ?  $_SERVER["PATH_INFO"] : $_SERVER["REQUEST_URI"];
+
+            if ($path === $route->uri) {
+                return $route->action;
+            }
+        }
     }
 
     public function getRoutes(): array

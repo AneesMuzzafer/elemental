@@ -12,7 +12,7 @@ class Route
     public $action;
     public Array $params = [];
 
-    public function __construct(String $method, String $uri, Callable $action)
+    public function __construct(String $method, String $uri, Array | Callable $action)
     {
         $this->method = $method;
         $this->uri = $uri;

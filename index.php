@@ -13,8 +13,6 @@ $engine = $app->make(HTTPEngine::class);
 
 $request = Request::read();
 
-// dump(router()->getRoutes());
-
 $response = $engine->run($request);
 
 $response->send();

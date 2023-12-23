@@ -17,9 +17,9 @@ class HTTPEngine
 
     public function run(Request $request)
     {
-        // $this->router->registerRoutes();
 
-        $controller = $this->getController($request);
+        $controller = $this->router->getController($request);
+
         $response = new Response();
 
         if (is_callable($controller)) {
@@ -28,18 +28,5 @@ class HTTPEngine
         }
 
         return $response;
-    }
-
-    function getController(Request $request)
-    {
-        $method = $_SERVER["REQUEST_METHOD"];
-
-        foreach ($this->router->routes[$method] as $route) {
-            $path = array_key_exists("PATH_INFO", $_SERVER) ?  $_SERVER["PATH_INFO"] : $_SERVER["REQUEST_URI"];
-
-            if ($path === $route->uri) {
-                return $route->action;
-            }
-        }
     }
 }
