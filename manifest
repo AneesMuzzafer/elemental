@@ -1,0 +1,22 @@
+<?php
+
+if ($argv[1] === "serve") {
+    shell_exec(`php -S 127.0.0.1:8000`);
+} else if ($argv[1] === "tinker") {
+
+    print_r("  Starting shell session:\n\n");
+
+    while (true) {
+        $input = readline("> ");
+
+        if ($input === "exit") {
+            break;
+        }
+        try {
+            $output = eval($input);
+            var_dump("= " . $output . "\n");
+        } catch (Throwable $e) {
+            print_r("= Could not be evaluated! Error:" . $e->getMessage() . "\n");
+        }
+    }
+}
