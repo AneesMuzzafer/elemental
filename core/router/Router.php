@@ -3,6 +3,7 @@
 namespace Core\Router;
 
 use Core\Exception\RouterException;
+use Core\Main\App;
 use Core\Request\Request;
 
 class Router
@@ -44,17 +45,53 @@ class Router
         require_once $path;
     }
 
-    public function getController(Request $request)
+    public function resolveController(Request $request)
+    {
+        $route = $this->resolveRoute($request);
+
+        if ($route === null) {
+            throw new RouterException("404! Route Not Found.");
+        }
+
+
+        if (is_callable($route->action)) {
+
+            $action = $route->action;
+        } else if (is_array($route->action)) {
+
+            $controller = $route->action[0];
+            $method = $route->action[1];
+
+            $controllerInstance = App::getInstance()->make($controller);
+
+            try {
+                $action = [$controllerInstance, $method];
+            } catch (\Throwable $e) {
+                throw new RouterException("Could not call ". $method . " on " . $controller);
+            }
+        }
+
+        if(!$action) {
+            throw new RouterException("Could not resolve the Route controller");
+        }
+
+        return $action;
+    }
+
+    public function resolveRoute(Request $request): ?Route
     {
         $method = $_SERVER["REQUEST_METHOD"];
 
+        $path = array_key_exists("PATH_INFO", $_SERVER) ?  $_SERVER["PATH_INFO"] : $_SERVER["REQUEST_URI"];
+
         foreach ($this->routes[$method] as $route) {
-            $path = array_key_exists("PATH_INFO", $_SERVER) ?  $_SERVER["PATH_INFO"] : $_SERVER["REQUEST_URI"];
 
             if ($path === $route->uri) {
-                return $route->action;
+                return $route;
             }
         }
+
+        return null;
     }
 
     public function getRoutes(): array
@@ -62,7 +99,7 @@ class Router
         return $this->routes;
     }
 
-    public static function get(String $uri, callable $action): self
+    public static function get(String $uri, array | callable $action): static
     {
 
         $route = new Route("GET", $uri, $action);
@@ -74,7 +111,7 @@ class Router
         return $instance;
     }
 
-    public static function post(String $uri, String | array $action = null): self
+    public static function post(String $uri, array | callable $action): static
     {
 
         $route = new Route("POST", $uri, $action);

@@ -18,13 +18,13 @@ class HTTPEngine
     public function run(Request $request)
     {
 
-        $controller = $this->router->getController($request);
+        $controller = $this->router->resolveController($request);
 
         $response = new Response();
 
         if (is_callable($controller)) {
 
-            $response->generate($controller());
+            $response->generate(call_user_func($controller));
         }
 
         return $response;

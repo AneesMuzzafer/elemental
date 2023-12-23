@@ -40,7 +40,10 @@ class Container
         }
 
         $constructor = $reflection->getConstructor();
-        $dependencies = $constructor->getParameters();
+
+        if ($constructor != null) {
+            $dependencies = $constructor->getParameters();
+        }
 
         if ($constructor === null || count($dependencies) == 0) {
             return $reflection->newInstance();
