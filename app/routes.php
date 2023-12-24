@@ -9,8 +9,9 @@ Router::get("/", function (MailService $mailService) {
     return "Rendered in /" . " -- " . $msg;
 });
 
-Router::get("/user/{id}/posts/{post_id:slug}", function () {
-    return "from paramed route";
+Router::get("/user/{id}/posts/{post_id:slug}", function (MailService $mailService, $id, $postId, $nweid) {
+    $msg = $mailService->send("From Route Callback");
+    return "From paramed route . " . $msg . "id is " . $id . " and post id is " . $postId . "--- " . $nweid ;
 });
 
 Router::get("/abc", [TestController::class, "index"]);

@@ -2,6 +2,7 @@
 
 namespace Core\Main;
 
+use Core\Router\Route;
 use ReflectionClass;
 
 class Container
@@ -76,9 +77,9 @@ class Container
         return $reflection->newInstanceArgs($resolvedDependencies);
     }
 
-    public function resolveMethod(array | callable $action)
+    public function resolveMethod(array | callable $action, array $args)
     {
-
+        $i = 0;
         if (!is_array($action)) {
 
             $reflectionFunction = new \ReflectionFunction($action);
@@ -89,14 +90,19 @@ class Container
                 return $reflectionFunction->invoke();
             }
 
-            $resolvedParameters = array_map(function ($parameter) {
+            $resolvedParameters = array_map(function ($parameter) use ($args, &$i) {
                 $type = $parameter->getType();
 
-                return $this->make($type->getName());
+                if ($type == null) {
+                    if ($i < count($args)) {
+                        return $args[$i++]["value"];
+                    }
+                } else {
+                    return $this->make($type->getName());
+                }
             }, $parameters);
 
             return $reflectionFunction->invokeArgs($resolvedParameters);
-
         } else {
 
             $object = $action[0];

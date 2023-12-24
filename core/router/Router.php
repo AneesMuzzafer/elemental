@@ -47,7 +47,7 @@ class Router
 
     public function resolveController(Request $request)
     {
-        $route = $this->resolveRoute($request);
+        [$route, $args] = $this->resolveRoute($request);
 
         if ($route === null) {
             throw new RouterException("404! Route Not Found.");
@@ -65,21 +65,17 @@ class Router
 
             $controllerInstance = $app->make($controller);
 
-            try {
-                $action = [$controllerInstance, $method];
-            } catch (\Throwable $e) {
-                throw new RouterException("Could not call " . $method . " on " . $controller);
-            }
+            $action = [$controllerInstance, $method];
         }
 
         if (!$action) {
             throw new RouterException("Could not resolve the Route controller");
         }
 
-        return $action;
+        return [$action, $args];
     }
 
-    public function resolveRoute(Request $request): ?Route
+    public function resolveRoute(Request $request)
     {
 
         $method = $request->method();
@@ -104,11 +100,15 @@ class Router
             if (count($route->routeSegments) !== count($segments)) continue;
 
             $flag = true;
+            $args = [];
             for ($i = 0; $i < count($segments); $i++) {
                 $uriSegment = $route->routeSegments[$i];
                 $pathSegment = $segments[$i];
 
-                if ($uriSegment["is_param"]) continue;
+                if ($uriSegment["is_param"]) {
+                    $args[] = ["key" => $uriSegment["key"], "value" => $pathSegment, "binding" => $uriSegment["binding"]];
+                    continue;
+                }
 
                 if ($uriSegment["key"] != $pathSegment) {
                     $flag = false;
@@ -116,7 +116,7 @@ class Router
             }
 
             if ($flag) {
-                return $route;
+                return [$route, $args];
             }
         }
 
