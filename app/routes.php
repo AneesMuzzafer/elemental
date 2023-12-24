@@ -9,4 +9,8 @@ Router::get("/", function (MailService $mailService) {
     return "Rendered in /" . " -- " . $msg;
 });
 
+Router::get("/user/{id}/posts/{post_id:slug}", function () {
+    return "from paramed route";
+});
+
 Router::get("/abc", [TestController::class, "index"]);

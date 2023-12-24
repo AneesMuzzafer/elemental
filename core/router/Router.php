@@ -68,11 +68,11 @@ class Router
             try {
                 $action = [$controllerInstance, $method];
             } catch (\Throwable $e) {
-                throw new RouterException("Could not call ". $method . " on " . $controller);
+                throw new RouterException("Could not call " . $method . " on " . $controller);
             }
         }
 
-        if(!$action) {
+        if (!$action) {
             throw new RouterException("Could not resolve the Route controller");
         }
 
@@ -81,12 +81,33 @@ class Router
 
     public function resolveRoute(Request $request): ?Route
     {
-        $method = $_SERVER["REQUEST_METHOD"];
 
-        $path = array_key_exists("PATH_INFO", $_SERVER) ?  $_SERVER["PATH_INFO"] : $_SERVER["REQUEST_URI"];
+        dump($request->cookies(), "cookies");
+        dump($request->data(), "data");
+        dump($request->headers(), "headers");
+        dump($request->queryString(), "queryString");
+        dump($request, "request");
+
+
+        $method = $request->method();
+        $requestURI = $request->uri();
+        dump($requestURI);
+        $path = strstr($requestURI, "?", true);
+        // $path = trim(strstr($requestURI, "?", true), '/');
+        $segments = explode('/', $path);
+
+        $routeParameters = array_filter($segments, function ($segment) {
+            return strpos($segment, '{') !== false && strpos($segment, '}') !== false;
+        });
+
+        $routeParameters = array_map(function ($placeholder) {
+            return trim($placeholder, '{}');
+        }, $routeParameters);
+
+        // dump($routeParameters);
+        // dump($path);
 
         foreach ($this->routes[$method] as $route) {
-
             if ($path === $route->uri) {
                 return $route;
             }
@@ -102,7 +123,6 @@ class Router
 
     public static function get(String $uri, array | callable $action): static
     {
-
         $route = new Route("GET", $uri, $action);
 
         $instance = self::$instance;

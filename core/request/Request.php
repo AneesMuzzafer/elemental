@@ -5,36 +5,41 @@ namespace Core\Request;
 use SimpleXMLElement;
 use stdClass;
 
+/**
+ * Class Request
+ *
+ * @property mixed $dynamicProperty
+ */
 class Request
 {
 
     protected static $instance = null;
 
-    public string $method;
-    public string $uri;
+    protected string $method;
 
+    protected string $uri;
+    protected string $uriDecoded;
 
-    public array $headers = [];
-    public mixed $rawContent;
+    protected array $headers = [];
+    protected mixed $rawContent;
 
-    public array $cookies = [];
+    protected array $cookies = [];
 
-    public array $files = [];
+    protected array $data = [];
 
-    public array $data = [];
+    protected array $files = [];
 
-    public string $text;
-    public string $js;
-    public string $html;
-    public stdClass $json;
-    public SimpleXMLElement $xml;
+    protected string $text;
+    protected string $js;
+    protected string $html;
+    protected stdClass $json;
+    protected SimpleXMLElement $xml;
 
-    public string $contentType;
+    protected string $contentType;
 
-    public ?string $queryString;
-    public ?string $remoteIP;
-    public ?string $remotePort;
-
+    protected ?string $queryString;
+    protected ?string $remoteIP;
+    protected ?string $remotePort;
 
     public function __construct()
     {
@@ -52,127 +57,202 @@ class Request
     {
         $instance = static::getInstance();
 
-        static::readServerAttributes($instance);
+        $instance->readServerAttributes();
 
-        static::readRequestAttributes($instance);
+        $instance->readRequestAttributes();
 
-        static::readMethodAttributes($instance);
+        $instance->readMethodAttributes();
 
-        static::parseBody($instance);
+        $instance->parseBody();
 
-        static::readFiles($instance);
-
-        dump($_SERVER, "server");
-        dump($instance->headers, "headers");
-        dump($instance->rawContent, "raw content");
-        dump($_REQUEST, "request");
-        dump($_GET, "GET");
-        dump($_POST, "POST");
-        dump($_FILES, "FILES");
-        dump($instance, "instance");
+        $instance->readFiles();
 
         return $instance;
     }
 
-    public static function readServerAttributes(Request $instance)
+    public function readServerAttributes()
     {
 
-        $instance->method = isset($_SERVER["REQUEST_METHOD"]) ? $_SERVER["REQUEST_METHOD"] : "";
-        $instance->uri = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
+        $this->method = isset($_SERVER["REQUEST_METHOD"]) ? $_SERVER["REQUEST_METHOD"] : "";
+        $this->uri = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
+        $this->uriDecoded = urldecode($this->uri);
 
-        $instance->headers = getallheaders();
+        $this->headers = getallheaders();
 
-        $instance->cookies = $_COOKIE;
+        $this->cookies = $_COOKIE;
 
-        $instance->rawContent = file_get_contents("php://input");
+        $this->rawContent = file_get_contents("php://input");
 
-        $instance->contentType = isset($_SERVER["CONTENT_TYPE"]) ? $_SERVER["CONTENT_TYPE"] : "";
+        $this->contentType = isset($_SERVER["CONTENT_TYPE"]) ? $_SERVER["CONTENT_TYPE"] : "";
 
-        $instance->queryString = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : "";
-        $instance->remoteIP = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "";
-        $instance->remotePort = isset($_SERVER["REMOTE_PORT"]) ? $_SERVER["REMOTE_PORT"] : "";
+        $this->queryString = isset($_SERVER["QUERY_STRING"]) ? $_SERVER["QUERY_STRING"] : "";
+        $this->remoteIP = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "";
+        $this->remotePort = isset($_SERVER["REMOTE_PORT"]) ? $_SERVER["REMOTE_PORT"] : "";
     }
 
-    public static function readRequestAttributes(Request $instance)
+    public function readRequestAttributes()
     {
         if (!is_array($_REQUEST)) return;
 
         foreach ($_REQUEST as $key => $value) {
-            $instance->{$key} = $value;
-            $instance->data[$key] = $value;
+            $this->{$key} = $value;
+            $this->data[$key] = $value;
         }
     }
 
-    public static function readMethodAttributes(Request $instance)
+    public function readMethodAttributes()
     {
-        switch ($instance->method) {
+        switch ($this->method) {
             case "GET":
-                static::readGetAttributes($instance);
+                $this->readGetAttributes();
                 break;
             case "POST":
-                static::readPostAttributes($instance);
+                $this->readPostAttributes();
                 break;
             case "PUT":
             case "PATCH":
             case "'DELETE'":
             case "'HEAD":
             case "OPTIONS":
-                static::readRawContent($instance);
+                $this->readRawContent();
                 break;
             default:
                 throw new \Exception("Request Method not defined");
         }
     }
 
-    public static function readGetAttributes(Request $instance)
+    public function readGetAttributes()
     {
         if (!is_array($_GET)) return;
 
         foreach ($_GET as $key => $value) {
-            $instance->{$key} = $value;
-            $instance->data[$key] = $value;
+            $this->{$key} = $value;
+            $this->data[$key] = $value;
         }
     }
 
-    public static function readPostAttributes(Request $instance)
+    public function readPostAttributes()
     {
         if (!is_array($_POST)) return;
 
         foreach ($_POST as $key => $value) {
-            $instance->{$key} = $value;
-            $instance->data[$key] = $value;
+            $this->{$key} = $value;
+            $this->data[$key] = $value;
         }
     }
 
-    public static function readRawContent(Request $instance)
+    public function readRawContent()
     {
     }
 
-    public static function parseBody(Request $instance)
+    public function parseBody()
     {
-        switch ($instance->contentType) {
+        switch ($this->contentType) {
             case "text/plain":
-                $instance->text = $instance->rawContent;
+                $this->text = $this->rawContent;
                 break;
             case "application/javascript":
-                $instance->js = $instance->rawContent;
+                $this->js = $this->rawContent;
                 break;
             case "text/html":
-                $instance->html = $instance->rawContent;
+                $this->html = $this->rawContent;
                 break;
             case "application/json":
-                $instance->data = json_decode($instance->rawContent, true);
-                $instance->json = json_decode($instance->rawContent);
+                $this->data = json_decode($this->rawContent, true);
+                $this->json = json_decode($this->rawContent);
 
                 break;
             case "application/xml":
-                $instance->xml = simplexml_load_string($instance->rawContent);
-                $instance->data = json_decode(json_encode($instance->xml), true);
+                $this->xml = simplexml_load_string($this->rawContent);
+                $this->data = json_decode(json_encode($this->xml), true);
                 break;
         }
     }
 
-    public static function readFiles(Request $instance){
-        $instance->files = $_FILES;
+    public function readFiles()
+    {
+        $this->files = $_FILES;
+    }
+
+    // Getters
+
+    public function method()
+    {
+        return $this->method;
+    }
+
+    public function uri()
+    {
+        return $this->uriDecoded;
+    }
+
+    public function headers()
+    {
+        return $this->headers;
+    }
+
+    public function rawContent()
+    {
+        return $this->rawContent;
+    }
+
+    public function cookies()
+    {
+        return $this->cookies;
+    }
+
+    public function data()
+    {
+        return $this->data;
+    }
+
+    public function files()
+    {
+        return $this->files;
+    }
+
+    public function text()
+    {
+        return $this->text;
+    }
+
+    public function js()
+    {
+        return $this->js;
+    }
+
+    public function html()
+    {
+        return $this->html;
+    }
+
+    public function json()
+    {
+        return $this->json;
+    }
+
+    public function xml()
+    {
+        return $this->xml;
+    }
+
+    public function contentType()
+    {
+        return $this->contentType;
+    }
+
+    public function queryString()
+    {
+        return $this->queryString;
+    }
+
+    public function ip()
+    {
+        return $this->remoteIP;
+    }
+
+    public function port()
+    {
+        return $this->remotePort;
     }
 }
