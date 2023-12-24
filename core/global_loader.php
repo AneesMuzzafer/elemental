@@ -14,9 +14,10 @@ function console_log(...$msgs)
     }
 }
 
-function dump($instance)
+function dump($instance, $msg = "")
 {
-    echo "<pre>";
+    echo "<span>$msg</span>";
+    echo '<pre style="background-color: #f4f4f4; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
     echo print_r($instance, true);
     echo "</pre>";
 }
