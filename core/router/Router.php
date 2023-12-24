@@ -101,10 +101,7 @@ class Router
 
         foreach ($this->routes[$method] as $route) {
 
-            dump($route->routeSegments, "Route Segments");
-            dump($segments, "Segments");
             if (count($route->routeSegments) !== count($segments)) continue;
-
 
             $flag = true;
             for ($i = 0; $i < count($segments); $i++) {

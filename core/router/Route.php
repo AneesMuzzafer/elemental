@@ -11,13 +11,7 @@ class Route
     public String $uri;
     public $action;
 
-    public array $segments = [];
-    public array $routeSegments = [
-        ["key" => "user", "is_param" => false, "bindingKey" => ""],
-        ["key" => "abc", "is_param" => true, "bindingKey" => ""],
-        ["key" => "posts", "is_param" => false, "bindingKey" => ""],
-        ["key" => "post", "is_param" => true, "bindingKey" => "slug"],
-    ];
+    public array $routeSegments = [];
 
     public function __construct(String $method, String $uri, array | callable $action)
     {
@@ -27,10 +21,6 @@ class Route
         $this->action = $action;
 
         $this->generateRouteProperties();
-
-        echo "<pre>";
-        var_dump($this->routeSegments);
-        echo "</pre>";
     }
 
     public function generateRouteProperties(): void
