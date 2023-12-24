@@ -82,33 +82,43 @@ class Router
     public function resolveRoute(Request $request): ?Route
     {
 
-        dump($request->cookies(), "cookies");
-        dump($request->data(), "data");
-        dump($request->headers(), "headers");
-        dump($request->queryString(), "queryString");
-        dump($request, "request");
-
-
         $method = $request->method();
         $requestURI = $request->uri();
-        dump($requestURI);
+
         $path = strstr($requestURI, "?", true);
-        // $path = trim(strstr($requestURI, "?", true), '/');
-        $segments = explode('/', $path);
 
-        $routeParameters = array_filter($segments, function ($segment) {
-            return strpos($segment, '{') !== false && strpos($segment, '}') !== false;
-        });
+        if ($path == "/") {
+            $segments = ["/"];
+        } else {
 
-        $routeParameters = array_map(function ($placeholder) {
-            return trim($placeholder, '{}');
-        }, $routeParameters);
+            if ($path[0] == "/") {
+                $path = substr($path, 1);
+            }
 
-        // dump($routeParameters);
-        // dump($path);
+            $segments = explode('/', $path);
+        }
+
 
         foreach ($this->routes[$method] as $route) {
-            if ($path === $route->uri) {
+
+            dump($route->routeSegments, "Route Segments");
+            dump($segments, "Segments");
+            if (count($route->routeSegments) !== count($segments)) continue;
+
+
+            $flag = true;
+            for ($i = 0; $i < count($segments); $i++) {
+                $uriSegment = $route->routeSegments[$i];
+                $pathSegment = $segments[$i];
+
+                if ($uriSegment["is_param"]) continue;
+
+                if ($uriSegment["key"] != $pathSegment) {
+                    $flag = false;
+                };
+            }
+
+            if ($flag) {
                 return $route;
             }
         }

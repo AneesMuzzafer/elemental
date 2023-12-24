@@ -11,7 +11,6 @@ class Route
     public String $uri;
     public $action;
 
-    // public array $params = [];
     public array $segments = [];
     public array $routeSegments = [
         ["key" => "user", "is_param" => false, "bindingKey" => ""],
@@ -27,19 +26,32 @@ class Route
         $this->uri = $uri;
         $this->action = $action;
 
-        $this->makeRouteProperties();
+        $this->generateRouteProperties();
+
+        echo "<pre>";
+        var_dump($this->routeSegments);
+        echo "</pre>";
     }
 
-    public function makeRouteProperties(): void
+    public function generateRouteProperties(): void
     {
         $uri = $this->uri;
-        if ($this->uri != "/" && $this->uri[0] == "/") {
-            $uri = substr($this->uri, 1);
+
+        if ($uri == "/") {
+
+            $this->routeSegments = [
+                ["key" => "/", "is_param" => false, "binding" => ""],
+            ];
+            return;
+        }
+
+        if ($uri[0] == "/") {
+            $uri = substr($uri, 1);
         }
 
         $segments = explode('/', $uri);
 
-        $segments_s = array_map(function ($segment) {
+        $this->routeSegments = array_map(function ($segment) {
 
             if ($segment === "") return false;
 
@@ -64,40 +76,5 @@ class Route
 
             return $routeProp;
         }, $segments);
-
-
-
-
-
-        echo "<pre>";
-        // var_dump($this->segments);
-        var_dump($segments_s);
-        echo "</pre>";
-        // $this->params
     }
-
-    // public static function get(String $uri, Callable  $action): self{
-
-    //     $instance = new static();
-
-    //     $instance->method = "GET";
-    //     $instance->uri = $uri;
-    //     $instance->action = $action;
-
-    //     $instance->router->addRoute($instance->method, $instance);
-    //     return $instance;
-    // }
-
-    // public static function post(String $uri, String | Array $action = null): self{
-
-    //     $instance = new static();
-
-    //     $instance->method = "POST";
-    //     $instance->uri = $uri;
-    //     $instance->action = $action;
-
-    //     $instance->router->addRoute($instance->method, $instance);
-    //     return $instance;
-    // }
-
 }
