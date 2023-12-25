@@ -17,6 +17,8 @@ class App extends Container
             throw new \Core\Exception\AppException("App already initiated. Access the instance using App::getInstance() method");
         }
 
+        $this->resolvedInstances[App::class] = $this;
+
         $this->initializeApp();
     }
 

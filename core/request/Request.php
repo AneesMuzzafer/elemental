@@ -15,7 +15,6 @@ class Request
 {
 
     protected App $app;
-    protected static $instance = null;
 
     protected string $method;
 
@@ -48,17 +47,17 @@ class Request
         $this->app = $app;
     }
 
-    public static function getInstance()
-    {
-        if (is_null(static::$instance)) {
-            // static::$instance = new Request();
-        }
-        return static::$instance;
-    }
+    // public static function getInstance()
+    // {
+    //     if (is_null(static::$instance)) {
+    //         static::$instance = new Request();
+    //     }
+    //     return static::$instance;
+    // }
 
     public static function read()
     {
-        $instance = App::getInstance()->make(Request::class);
+        $instance = app()->make(Request::class);
 
         $instance->readServerAttributes();
 

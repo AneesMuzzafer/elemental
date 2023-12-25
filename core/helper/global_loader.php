@@ -1,10 +1,8 @@
 <?php
 
-use Core\Router\Router;
-
 function app()
 {
-    return $GLOBALS['app'];
+    return \Core\Main\App::getInstance();
 }
 
 function console_log(...$msgs)
@@ -24,7 +22,7 @@ function dump($instance, $msg = "")
 
 function router()
 {
-    return Router::getInstance();
+    return \Core\Router\Router::getInstance();
 }
 
 function auth()

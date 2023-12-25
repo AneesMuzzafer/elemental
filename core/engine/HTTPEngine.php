@@ -6,12 +6,9 @@ use Core\Main\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Core\Router\Router;
-use Core\Traits\SingletonInstance;
 
 class HTTPEngine
 {
-    // use SingletonInstance;
-
     private Router $router;
 
     public function __construct(private App $app)
