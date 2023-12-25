@@ -8,12 +8,14 @@ class Container
 {
     protected array $coreInstances = [
         App::class,
-        HttpEngine::class,
-        ConsoleEngine::class,
+        \Core\Engine\HTTPEngine::class,
+        \Core\Engine\ConsoleEngine::class,
         \Core\Router\Router::class,
         \Core\Request\Request::class,
         \Core\Response\Response::class
     ];
+
+    protected array $resolvedInstances = [];
 
     protected array $coreBindings = [];
 
@@ -56,7 +58,14 @@ class Container
 
     public function resolveInstance(string $key)
     {
-        return $key::getInstance();
+        if(isset($this->resolvedInstances[$key])) {
+            return $this->resolvedInstances[$key];
+        }
+
+        $intance = $this->resolve($key);
+        $this->resolvedInstances[$key] = $intance;
+
+        return $intance;
     }
 
     public function resolve(String $key)

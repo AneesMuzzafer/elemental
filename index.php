@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Core\Main\HTTPEngine;
+use Core\Engine\HTTPEngine;
 use Core\Request\Request;
 
 require "./autoload.php";

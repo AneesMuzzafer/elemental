@@ -2,6 +2,7 @@
 
 namespace Core\Request;
 
+use Core\Main\App;
 use SimpleXMLElement;
 use stdClass;
 
@@ -13,6 +14,7 @@ use stdClass;
 class Request
 {
 
+    protected App $app;
     protected static $instance = null;
 
     protected string $method;
@@ -41,21 +43,22 @@ class Request
     protected ?string $remoteIP;
     protected ?string $remotePort;
 
-    private function __construct()
+    public function __construct(App $app)
     {
+        $this->app = $app;
     }
 
     public static function getInstance()
     {
         if (is_null(static::$instance)) {
-            static::$instance = new Request();
+            // static::$instance = new Request();
         }
         return static::$instance;
     }
 
     public static function read()
     {
-        $instance = static::getInstance();
+        $instance = App::getInstance()->make(Request::class);
 
         $instance->readServerAttributes();
 
