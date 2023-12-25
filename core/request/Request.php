@@ -41,7 +41,7 @@ class Request
     protected ?string $remoteIP;
     protected ?string $remotePort;
 
-    public function __construct()
+    private function __construct()
     {
     }
 

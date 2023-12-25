@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\MailService;
+use Core\Request\Request;
 
 class TestController
 {
@@ -11,9 +12,11 @@ class TestController
     {
     }
 
-    public function index(MailService $mailService)
+    public function index(MailService $mailService, Request $request, String $x, $y, String $z)
     {
         $msg = $mailService->send("Message from Test Controller");
-        return "Resolved from Index of Test Controller  - " . $msg;
+        dump($_REQUEST, "request main");
+        dump($request, "request");
+        return "Resolved from Index of Test Controller  - " . $msg . "with route params " . "$x, $y, $z" . " and request params are " . $request->data()["start"];
     }
 }

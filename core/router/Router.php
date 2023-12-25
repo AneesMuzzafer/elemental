@@ -81,7 +81,7 @@ class Router
         $method = $request->method();
         $requestURI = $request->uri();
 
-        $path = strstr($requestURI, "?", true);
+        $path = ($pos = strpos($requestURI, "?")) !== false ? substr($requestURI, 0, $pos) : $requestURI;
 
         if ($path == "/") {
             $segments = ["/"];

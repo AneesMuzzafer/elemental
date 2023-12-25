@@ -1,6 +1,6 @@
 <?php
 
-if ($argv[1] === "serve") {
+if ($argv[1] === "run") {
     shell_exec(`php -S 127.0.0.1:8000`);
 } else if ($argv[1] === "tinker") {
 

@@ -2,11 +2,22 @@
 
 namespace Core\Main;
 
-use Core\Router\Route;
 use ReflectionClass;
 
 class Container
 {
+    protected array $coreInstances = [
+        App::class,
+        HttpEngine::class,
+        ConsoleEngine::class,
+        \Core\Router\Router::class,
+        \Core\Request\Request::class,
+        \Core\Response\Response::class
+    ];
+
+    protected array $coreBindings = [];
+
+    protected array $instances = [];
     protected array $bindings = [];
 
     public function bind(String $key, String | callable $value)
@@ -18,6 +29,10 @@ class Container
 
     public function make(String $key)
     {
+        if (in_array($key, $this->coreInstances)) {
+            return $this->resolveInstance($key);
+        }
+
         if (array_key_exists($key, $this->bindings)) {
 
             $value = $this->bindings[$key];
@@ -30,6 +45,11 @@ class Container
         }
 
         return $this->resolve($key);
+    }
+
+    public function resolveInstance(string $key)
+    {
+        return $key::getInstance();
     }
 
     public function resolve(String $key)
@@ -77,52 +97,49 @@ class Container
         return $reflection->newInstanceArgs($resolvedDependencies);
     }
 
-    public function resolveMethod(array | callable $action, array $args)
+    public function resolveMethod(array|callable $action, array $args)
     {
         $i = 0;
+
         if (!is_array($action)) {
-
-            $reflectionFunction = new \ReflectionFunction($action);
-            $parameters = $reflectionFunction->getParameters();
-
-            if (count($parameters) == 0) {
-
-                return $reflectionFunction->invoke();
-            }
-
-            $resolvedParameters = array_map(function ($parameter) use ($args, &$i) {
-                $type = $parameter->getType();
-
-                if ($type == null) {
-                    if ($i < count($args)) {
-                        return $args[$i++]["value"];
-                    }
-                } else {
-                    return $this->make($type->getName());
-                }
-            }, $parameters);
-
-            return $reflectionFunction->invokeArgs($resolvedParameters);
+            $reflection = new \ReflectionFunction($action);
         } else {
+            [$object, $method] = $action;
+            $reflection = new \ReflectionMethod($object, $method);
+        }
 
-            $object = $action[0];
-            $method = $action[1];
+        $parameters = $reflection->getParameters();
 
-            $reflectionMethod = new \ReflectionMethod($object, $method);
-            $parameters = $reflectionMethod->getParameters();
+        if (count($parameters) == 0) {
+            return $reflection->invoke(...($object ? [$object] : []));
+        }
 
-            if (count($parameters) == 0) {
+        $resolvedParameters = array_map(function ($parameter) use ($args, &$i) {
+            $type = $parameter->getType();
 
-                return $reflectionMethod->invoke($object);
+            if ($type instanceof \ReflectionUnionType) {
+                throw new \Exception("Cannot resolve a union type");
             }
 
-            $resolvedParameters = array_map(function ($parameter) {
-                $type = $parameter->getType();
+            if ($type == null || $type->getName() == "string") {
+                return $i < count($args) ? $args[$i++]["value"] : null;
+            }
 
-                return $this->make($type->getName());
-            }, $parameters);
+            if ($type->isBuiltin()) {
+                throw new \Exception("Param type cannot be " . $type->getName() . ".");
+            }
 
-            return $reflectionMethod->invokeArgs($object, $resolvedParameters);
+            return $this->make($type->getName());
+        }, $parameters);
+
+        if ($reflection instanceof \ReflectionMethod) {
+            return $reflection->invokeArgs($object, $resolvedParameters);
         }
+
+        if ($reflection instanceof \ReflectionFunction) {
+            return $reflection->invokeArgs($resolvedParameters);
+        }
+
+        return null;
     }
 }
