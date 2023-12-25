@@ -27,6 +27,13 @@ class Container
         }
     }
 
+    public function bindSingleton(string $key, String | callable $value)
+    {
+        if (!isset($this->instances[$key])) {
+            $this->instances[$key] = $value;
+        }
+    }
+
     public function make(String $key)
     {
         if (in_array($key, $this->coreInstances)) {
