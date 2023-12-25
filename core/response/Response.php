@@ -2,19 +2,25 @@
 
 namespace Core\Response;
 
+use Core\Request\Request;
+
 class Response {
 
-    public string $body = "";
+    protected Request $request;
 
-    public function __construct() {
+    private string $status = 200;
 
+    public string $content = "";
+
+    public function __construct(Request $request) {
+        $this->request = $request;
     }
 
     public function generate($data) {
-        $this->body = $this->body . $data;
+        $this->content = $this->content . $data;
     }
 
     public function send() {
-        echo $this->body;
+        echo $this->content;
     }
 }

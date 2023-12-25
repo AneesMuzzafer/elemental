@@ -21,7 +21,7 @@ class HTTPEngine
 
         [$controller, $resolvedArgs] = $this->router->resolveController($request);
 
-        $response = new Response();
+        $response = $this->app->make(Response::class);
 
         if (is_callable($controller)) {
 
