@@ -72,6 +72,10 @@ class Router
             throw new RouterException("Could not resolve the Route controller");
         }
 
+        if(!is_callable($action)) {
+            throw new RouterException("Route controller not callable!");
+        }
+
         return [$action, $args];
     }
 

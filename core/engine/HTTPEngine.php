@@ -5,6 +5,7 @@ namespace Core\Engine;
 use Core\Main\App;
 use Core\Request\Request;
 use Core\Response\Response;
+use Core\Response\ResponseGenerator;
 use Core\Router\Router;
 
 class HTTPEngine
@@ -19,16 +20,21 @@ class HTTPEngine
     public function run(Request $request)
     {
 
-        [$controller, $resolvedArgs] = $this->router->resolveController($request);
+        [$action, $resolvedArgs] = $this->router->resolveController($request);
 
-        $response = $this->app->make(Response::class);
-
-        if (is_callable($controller)) {
-
-            $result = $this->app->resolveMethod($controller, $resolvedArgs);
-            $response->generate($result);
+        try {
+            $response = $this->app->resolveMethod($action, $resolvedArgs);
+        } catch (\Throwable $e) {
+            $response = $this->app->make(Response::class);
         }
 
+        return $this->prepareResponse($response, $request);
+    }
+
+
+    public function prepareResponse($response, $request)
+    {
+        $response = (new ResponseGenerator($response))->toResponse();
         return $response;
     }
 }
