@@ -1,7 +1,10 @@
 <?php
 
 use App\Controllers\TestController;
+use App\Middlewares\HasAuth;
+use App\Middlewares\HasToken;
 use App\Services\MailService;
+use Core\Helper\Pipeline;
 use Core\Request\Request;
 use Core\Router\Router;
 use Core\View\View;
@@ -18,10 +21,19 @@ Router::get("/user/{id}/posts/{post_id:slug}", function (Request $request,  Mail
 });
 
 Router::get("/abc", function (Request $request) {
-    // return View::make("home", ["data" => "Allah-u-Akbar", "abc" => $request->data()["abc"]]);
-    // return "abc";
-    return view("home", ["data" => "Allah-u-Akbar", "abc" => "def"])->withLayout("layout.layout");
-    // return view("home", ["data" => "Allah-u-Akbar", "abc" => $request->data()["abc"]])->withLayout("layout");
+
+    $result = (new Pipeline())
+        ->makePipeline([HasToken::class, HasAuth::class])
+        ->pass("req")
+        ->atLastRun(function ($request) {
+            return $request . "processed in then Closure .";
+        })->execute();
+
+    dump($result, "abc");
+
+
+    return "end";
+    // return view("home", ["data" => "Allah-u-Akbar", "abc" => "def"])->withLayout("layout.layout");
 });
 
 Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
