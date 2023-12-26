@@ -26,7 +26,7 @@ class ResponseGenerator
             $content = (string) $this->content;
 
             $response->setContent($content);
-            $response->setHeader("Content-type", "text/html");
+            $response->setHeader("Content-type", "text/plain");
         }
 
         if (is_array($this->content)) {
@@ -47,6 +47,7 @@ class ResponseGenerator
 
         if ($this->content instanceof View) {
             $response->setContent($this->content->view());
+            $response->setHeader("Content-type", "text/html");
         }
 
         return $response;

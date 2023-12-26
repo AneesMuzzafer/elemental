@@ -9,7 +9,14 @@ class View
 
     private string $path;
     private string $name;
-    private string $content;
+
+    private string $layoutPath;
+    private string $layoutName;
+
+    private string $content = "";
+    private string $layoutContent = "";
+
+
     private array $params;
 
     public function __construct(string $name, array $params = [])
@@ -30,16 +37,37 @@ class View
     {
         ob_start();
 
-        extract($this->params);
+        $includeFile = function () {
 
-        include $this->path;
+            extract(func_get_arg(0));
 
-        $this->content =  ob_get_clean();
+            include func_get_arg(1);
+        };
 
+        $includeFile($this->params, $this->path);
+        $this->content = ob_get_clean();
+
+        unset($includeFile);
+    }
+
+    public function parseLayoutContent()
+    {
+        ob_start();
+
+        $includeFile = function () {
+
+            include func_get_arg(0);
+        };
+
+        $includeFile($this->layoutPath);
+        $this->layoutContent = ob_get_clean();
+
+        unset($includeFile);
     }
 
     public static function getPath($viewName)
     {
+        $viewName = static::getCurrentPath($viewName);
         $path = str_replace("\\", "/", getcwd()) . "/app/views/" . $viewName . ".php";
 
         if (!file_exists($path)) {
@@ -48,8 +76,43 @@ class View
         return $path;
     }
 
+    public static function getCurrentPath($viewName)
+    {
+        $segments = explode(".", $viewName);
+        $path = implode("/", $segments);
+        return $path;
+    }
+
     public function view()
     {
+        if (isset($this->layoutPath)) {
+
+            $this->parseLayoutContent();
+        }
+        $this->compileContent();
         return $this->content;
+    }
+
+    public function withLayout($layoutName)
+    {
+        $this->layoutName = $layoutName;
+        $layoutName = static::getCurrentPath($layoutName);
+
+        $layoutPath = str_replace("\\", "/", getcwd()) . "/app/views/" . $layoutName . ".php";
+
+        if (!file_exists($layoutPath)) {
+            throw new ViewNotFoundException("Could not find " . $this->layoutName . ".php");
+        }
+        $this->layoutPath = $layoutPath;
+        return $this;
+    }
+
+    public function compileContent()
+    {
+        if ($this->layoutContent == "") {
+            return $this->content;
+        }
+
+        $this->content = str_replace('{{ content }}', $this->content, $this->layoutContent);
     }
 }

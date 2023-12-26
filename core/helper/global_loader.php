@@ -1,4 +1,5 @@
 <?php
+use Core\View\View;
 
 function app()
 {
@@ -28,4 +29,12 @@ function router()
 function auth()
 {
     return "auth";
+}
+
+function view($name, $params = []){
+    return View::make($name, $params);
+}
+
+function component($name, $params = []){
+    return View::make($name, $params)->view();
 }

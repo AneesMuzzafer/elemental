@@ -18,7 +18,10 @@ Router::get("/user/{id}/posts/{post_id:slug}", function (Request $request,  Mail
 });
 
 Router::get("/abc", function (Request $request) {
-    return View::make("home", ["data" => "Allah-u-Akbar", "abc" => $request->data()["abc"]]);
+    // return View::make("home", ["data" => "Allah-u-Akbar", "abc" => $request->data()["abc"]]);
+    // return "abc";
+    return view("home", ["data" => "Allah-u-Akbar", "abc" => "def"])->withLayout("layout.layout");
+    // return view("home", ["data" => "Allah-u-Akbar", "abc" => $request->data()["abc"]])->withLayout("layout");
 });
 
 Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
