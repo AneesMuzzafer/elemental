@@ -25,7 +25,8 @@ class HTTPEngine
         try {
             $response = $this->app->resolveMethod($action, $resolvedArgs);
         } catch (\Throwable $e) {
-            $response = $this->app->make(Response::class);
+            // $response = $this->app->make(Response::class);
+            throw new \Exception(get_class($e) . " " . $e->getMessage());
         }
 
         return $this->prepareResponse($response, $request);

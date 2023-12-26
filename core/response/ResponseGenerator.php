@@ -4,6 +4,7 @@ namespace Core\Response;
 
 use Core\Main\App;
 use Core\Resource\JSONResource;
+use Core\View\View;
 
 class ResponseGenerator
 {
@@ -42,6 +43,10 @@ class ResponseGenerator
 
         if ($this->content instanceof JSONResource) {
             $response->setContent($this->content->toJson());
+        }
+
+        if ($this->content instanceof View) {
+            $response->setContent($this->content->view());
         }
 
         return $response;
