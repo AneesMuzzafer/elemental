@@ -44,16 +44,27 @@ Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
 
 Router::get("/db", function (Database $database) {
 
-    $post = Post::create([
-        // "name" => "Anees"
-        "title" => "Test Title",
-        "url" => "Test URL 2",
-        "excerpt" => "Test Excerpt",
-        "body" => "Test body",
-        "user_id" => 2,
-        "category_id" => 10,
-        "published_at" => date("Y-m-d H:i:s"),
-    ]);
+    // $post = Post::create([
+    //     // "name" => "Anees"
+    //     "title" => "Test Title",
+    //     "url" => "Test URL 2",
+    //     "excerpt" => "Test Excerpt",
+    //     "body" => "Test body",
+    //     "user_id" => 2,
+    //     "category_id" => 10,
+    //     "published_at" => date("Y-m-d H:i:s"),
+    // ]);
+
+    $post = new Post;
+
+    $post->title = "John Doe";
+    $post->url = "New URL 2";
+    $post->excerpt = "New Excerpt";
+    $post->body = "New Body";
+    $post->user_id = "2";
+    $post->category_id = "13";
+
+    $post->save();
 
     return [
         "status" => "success",

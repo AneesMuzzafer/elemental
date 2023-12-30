@@ -9,13 +9,14 @@ use ReflectionClass;
 
 class Model
 {
-
+    private Database $db;
     protected string $tableName;
     protected $data;
 
-    public function __construct(private Database $db)
+    public function __construct()
     {
         $this->tableName = $this->getTableNameFromClass();
+        $this->db = App::getInstance()->make(Database::class);
     }
 
     public function getTableNameFromClass()
@@ -35,32 +36,39 @@ class Model
 
         foreach ($data as $column => $value) {
             $this->data[$column] = $value;
-            // $this->{$column} = $value;
         }
     }
 
 
     public static function create(array $data)
     {
-        $model = new static(App::getInstance()->make(Database::class));
-
-        $columns = implode(', ', array_keys($data));
-        $values = implode(', ', array_map(fn ($val, $index) => ':' . $index, $data, array_keys($data)));
-
-        $sql = "INSERT INTO $model->tableName ($columns) VALUES ($values);";
-        $statement = $model->db->prepare($sql);
-
+        $model = new static();
         foreach ($data as $column => $value) {
+            $model->data[$column] = $value;
+        }
+
+        return $model->save();
+    }
+
+    public function save()
+    {
+        $columns = implode(', ', array_keys($this->data));
+        $values = implode(', ', array_map(fn ($val, $index) => ':' . $index, $this->data, array_keys($this->data)));
+
+        $sql = "INSERT INTO $this->tableName ($columns) VALUES ($values);";
+        $statement = $this->db->prepare($sql);
+
+        foreach ($this->data as $column => $value) {
             $statement->bindValue(':' . $column, $value);
         }
 
         $statement->execute();
 
-        $lastInsertId = $model->db->lastInsertId();
+        $lastInsertId = $this->db->lastInsertId();
 
-        $model->setData($data, $lastInsertId);
+        $this->setData($this->data, $lastInsertId);
 
-        return $model;
+        return $this;
     }
 
     public function update()
@@ -68,10 +76,6 @@ class Model
     }
 
     public function delete()
-    {
-    }
-
-    public function save()
     {
     }
 
@@ -90,6 +94,11 @@ class Model
         }
 
         return null;
+    }
+
+    public function __set(string $name, mixed $value)
+    {
+        $this->data[$name] = $value;
     }
 
     private function pluralize($singular)
