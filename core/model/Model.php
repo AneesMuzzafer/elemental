@@ -13,7 +13,7 @@ class Model
     protected string $tableName;
     protected string $primaryKey = "id";
 
-    protected array $data;
+    protected array $data = [];
 
     public function __construct()
     {

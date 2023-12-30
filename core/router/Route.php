@@ -56,12 +56,12 @@ class Route
                 if (count($parts) === 2) {
                     $routeProp["binding"] = $parts[1];
                 } else {
-                    $routeProp["binding"] = "";
+                    $routeProp["binding"] = false;
                 }
             } else {
                 $routeProp["key"] = $segment;
                 $routeProp["is_param"] = false;
-                $routeProp["binding"] = "";
+                $routeProp["binding"] = false;
             }
 
             return $routeProp;

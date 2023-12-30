@@ -2,6 +2,8 @@
 
 namespace Core\Main;
 
+use Core\Exception\ModelNotFound;
+use Core\Model\Model;
 use ReflectionClass;
 
 class Container
@@ -60,7 +62,7 @@ class Container
 
     public function resolveInstance(string $key)
     {
-        if(isset($this->resolvedInstances[$key])) {
+        if (isset($this->resolvedInstances[$key])) {
             return $this->resolvedInstances[$key];
         }
 
@@ -135,9 +137,11 @@ class Container
         $resolvedParameters = array_map(function ($parameter) use ($args, &$i) {
             $type = $parameter->getType();
 
-            if ($type instanceof \ReflectionUnionType) {
-                throw new \Exception("Cannot resolve a union type");
-            }
+            if ($type)
+
+                if ($type instanceof \ReflectionUnionType) {
+                    throw new \Exception("Cannot resolve a union type");
+                }
 
             if ($type == null || $type->getName() == "string") {
                 return $i < count($args) ? $args[$i++]["value"] : null;
@@ -145,6 +149,30 @@ class Container
 
             if ($type->isBuiltin()) {
                 throw new \Exception("Param type cannot be " . $type->getName() . ".");
+            }
+
+            foreach ($args as $arg) {
+
+                $modelClass = "App\Models\\" . ucfirst($arg["key"]);
+
+                if ($modelClass !== $type->getName()) {
+                    continue;
+                }
+
+                $model = $this->make($type->getName());
+
+                if ($model instanceof Model) {
+
+                    if (!($arg["binding"])) {
+                        $foundModel = $model->find($arg["value"]);
+                    } else {
+                        $foundModel = $model->where([$arg["binding"] => $arg["value"]]);
+                    }
+                    if (is_null($foundModel)) {
+                        throw new ModelNotFound("No model could be found with the given parameters");
+                    }
+                    return $foundModel;
+                }
             }
 
             return $this->make($type->getName());

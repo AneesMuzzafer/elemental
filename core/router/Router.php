@@ -58,12 +58,9 @@ class Router
             $action = $route->action;
         } else if (is_array($route->action)) {
 
-            $controller = $route->action[0];
-            $method = $route->action[1];
+            [$controller, $method] = $route->action;
 
-            $app = App::getInstance();
-
-            $controllerInstance = $app->make($controller);
+            $controllerInstance = App::getInstance()->make($controller);
 
             $action = [$controllerInstance, $method];
         }
@@ -72,7 +69,7 @@ class Router
             throw new RouterException("Could not resolve the Route controller");
         }
 
-        if(!is_callable($action)) {
+        if (!is_callable($action)) {
             throw new RouterException("Route controller not callable!");
         }
 

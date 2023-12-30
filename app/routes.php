@@ -42,7 +42,7 @@ Router::get("/abc", function (Request $request) {
 
 Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
 
-Router::get("/db", function (Database $database) {
+Router::get("/db/{post:title}", function (Request $request, Post $post) {
 
     // $post = Post::create([
     //     // "name" => "Anees"
@@ -55,7 +55,7 @@ Router::get("/db", function (Database $database) {
     //     "published_at" => date("Y-m-d H:i:s"),
     // ]);
 
-    $post = Post::where(["title" => "Daanya"]);
+    // $post = Post::where(["title" => "Daanya"]);
 
     // $post->title = "John Doe";
     // $post->url = "New URL updated";
@@ -69,5 +69,6 @@ Router::get("/db", function (Database $database) {
     return [
         "status" => "success",
         "post" => $post->getData(),
+        "request" => $request->data()
     ];
 });
