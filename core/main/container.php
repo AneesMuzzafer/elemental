@@ -12,7 +12,9 @@ class Container
         \Core\Engine\ConsoleEngine::class,
         \Core\Router\Router::class,
         \Core\Request\Request::class,
-        \Core\Response\Response::class
+        \Core\Response\Response::class,
+        \Core\Database\DatabaseConnection::class,
+        \Core\Database\Database::class,
     ];
 
     protected array $resolvedInstances = [];
@@ -127,7 +129,7 @@ class Container
         $parameters = $reflection->getParameters();
 
         if (count($parameters) == 0) {
-            return $reflection->invoke(...($object ? [$object] : []));
+            return $reflection->invoke(...(isset($object) ? [$object] : []));
         }
 
         $resolvedParameters = array_map(function ($parameter) use ($args, &$i) {
