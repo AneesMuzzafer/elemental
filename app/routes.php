@@ -55,19 +55,19 @@ Router::get("/db", function (Database $database) {
     //     "published_at" => date("Y-m-d H:i:s"),
     // ]);
 
-    $post = new Post;
+    $post = Post::where(["title" => "Daanya"]);
 
-    $post->title = "John Doe";
-    $post->url = "New URL 2";
-    $post->excerpt = "New Excerpt";
-    $post->body = "New Body";
-    $post->user_id = "2";
-    $post->category_id = "13";
+    // $post->title = "John Doe";
+    // $post->url = "New URL updated";
+    // $post->excerpt = "New Excerpt";
+    // $post->body = "New Body";
+    // $post->user_id = "2";
+    // $post->category_id = "13";
 
-    $post->save();
+    // $post->destroy();
 
     return [
         "status" => "success",
-        "post" => $post->body,
+        "post" => $post->getData(),
     ];
 });

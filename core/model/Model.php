@@ -4,14 +4,16 @@ namespace Core\Model;
 
 use Core\Database\Database;
 use Core\Main\App;
-use PDOException;
+use PDO;
 use ReflectionClass;
 
 class Model
 {
     private Database $db;
     protected string $tableName;
-    protected $data;
+    protected string $primaryKey = "id";
+
+    protected array $data;
 
     public function __construct()
     {
@@ -19,26 +21,16 @@ class Model
         $this->db = App::getInstance()->make(Database::class);
     }
 
-    public function getTableNameFromClass()
+    public function setData(array $data, $id = null)
     {
-        $reflect = new ReflectionClass($this);
-        $className = $reflect->getShortName();
-
-        $snakeCase = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $className));
-        $pluralizedSnakeCase = $this->pluralize($snakeCase);
-
-        return $pluralizedSnakeCase;
-    }
-
-    public function setData(array $data, $id)
-    {
-        $this->data = array_merge($data, ['id' => $id]);
+        if (!is_null($id)) {
+            $this->data = array_merge($data, [$this->primaryKey => $id]);
+        }
 
         foreach ($data as $column => $value) {
             $this->data[$column] = $value;
         }
     }
-
 
     public static function create(array $data)
     {
@@ -50,13 +42,36 @@ class Model
         return $model->save();
     }
 
+    public static function find($id)
+    {
+        $model = new static();
+        return $model->getFromPrimaryKey($id);
+    }
+
+    public function getFromPrimaryKey($id)
+    {
+        $sql = "SELECT * FROM $this->tableName WHERE $this->primaryKey = :id;";
+        $statement = $this->db->prepare($sql);
+
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+
+        $data = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if(empty($data)) {
+            return null;
+        }
+
+        $this->setData($data);
+        return $this;
+    }
+
     public function save()
     {
-        $columns = implode(', ', array_keys($this->data));
-        $values = implode(', ', array_map(fn ($val, $index) => ':' . $index, $this->data, array_keys($this->data)));
-
-        $sql = "INSERT INTO $this->tableName ($columns) VALUES ($values);";
+        $sql = $this->getSQL();
         $statement = $this->db->prepare($sql);
+
+
 
         foreach ($this->data as $column => $value) {
             $statement->bindValue(':' . $column, $value);
@@ -71,20 +86,102 @@ class Model
         return $this;
     }
 
-    public function update()
+    public function getSQL()
     {
+        if (!isset($this->data['id'])) {
+            $columns = implode(', ', array_keys($this->data));
+            $values = implode(', ', array_map(fn ($val, $index) => ':' . $index, $this->data, array_keys($this->data)));
+
+            $sql = "INSERT INTO $this->tableName ($columns) VALUES ($values);";
+            return $sql;
+        } else {
+            $setStmt = implode(', ', array_map(fn ($column) => "$column = :$column", array_keys($this->data)));
+
+            $sql = "UPDATE $this->tableName SET $setStmt WHERE $this->primaryKey = :id;";
+
+            return $sql;
+        }
     }
 
-    public function delete()
+    public static function update($id, array $data)
     {
+        if (is_null($id)) {
+            throw new \InvalidArgumentException("'id' cannot be null.");
+        }
+
+        $model = static::find($id);
+
+        if (is_null($model)) {
+            throw new \Exception("No model could be found with the given 'id'.");
+        }
+
+        $model->data = $data;
+        return $model->save();
     }
 
-    public function get()
+    public function destroy()
     {
+        if (!isset($this->data['id'])) {
+            throw new \InvalidArgumentException("Delete operation requires an 'id' to be set in the model data.");
+        }
+
+        $id = $this->data['id'];
+
+        $sql = "DELETE FROM $this->tableName WHERE $this->primaryKey = :id;";
+        $statement = $this->db->prepare($sql);
+
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+
+        $this->data = [];
+
+        return $id;
     }
 
-    public function where()
+    public static function delete($id)
     {
+        if (is_null($id)) {
+            throw new \InvalidArgumentException("'id' cannot be null.");
+        }
+
+        $model = static::find($id);
+
+        if (is_null($model)) {
+            throw new \Exception("No model could be found with the given 'id'.");
+        }
+        $model->data[$model->primaryKey] = $id;
+        return $model->destroy();
+    }
+
+    public static function where(array $conditions)
+    {
+        $model = new static();
+
+        $whereClause = implode(' AND ', array_map(fn ($column) => "$column = :$column", array_keys($conditions)));
+
+        $sql = "SELECT * FROM $model->tableName WHERE $whereClause;";
+        $statement = $model->db->prepare($sql);
+
+        foreach ($conditions as $column => $value) {
+            $statement->bindValue(':' . $column, $value);
+        }
+
+        $statement->execute();
+
+        $data = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            $model->setData($data);
+            return $model;
+        } else {
+            return null;
+        }
+    }
+
+
+    public function getData()
+    {
+        return $this->data;
     }
 
     public function __get($name)
@@ -99,6 +196,17 @@ class Model
     public function __set(string $name, mixed $value)
     {
         $this->data[$name] = $value;
+    }
+
+    public function getTableNameFromClass()
+    {
+        $reflect = new ReflectionClass($this);
+        $className = $reflect->getShortName();
+
+        $snakeCase = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $className));
+        $pluralizedSnakeCase = $this->pluralize($snakeCase);
+
+        return $pluralizedSnakeCase;
     }
 
     private function pluralize($singular)
