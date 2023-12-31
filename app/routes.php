@@ -40,7 +40,10 @@ Route::get("/abc", function (Request $request) {
 
     // dump($result, "abc");
 
-    return Response::redirect("/");
+    // return ["data" => "dummy"];
+    $res = Response::JSON(["data" => "dummy"], 404);
+
+    return $res;
     // return "end";
     // return view("home", ["data" => "Allah-u-Akbar", "abc" => "def"])->withLayout("layout.layout");
 });

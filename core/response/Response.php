@@ -11,10 +11,24 @@ class Response
     protected Request $request;
 
     private string $statusCode = "200";
-    private string $statusText = "OK";
 
     public string $content = "";
     public array $headers = [];
+
+    const STATUS_TEXT = [
+        200 => "OK",
+        201 => "Created",
+        204 => "No Content",
+        400 => "Bad Request",
+        401 => "Unauthorized",
+        403 => "Forbidden",
+        404 => "Not Found",
+        405 => "Method Not Allowed",
+        500 => "Internal Server Error",
+        501 => "Not Implemented",
+        502 => "Bad Gateway",
+        503 => "Service Unavailable",
+    ];
 
     public function __construct(Request $request)
     {
@@ -35,7 +49,13 @@ class Response
 
     public function setHeaders(array $headers): Response
     {
-        $this->headers = [...$this->headers, $headers];
+        $this->headers = array_merge($this->headers, $headers);
+        return $this;
+    }
+
+    public function setStatusCode(string $statusCode): Response
+    {
+        $this->statusCode = $statusCode;
         return $this;
     }
 
@@ -50,6 +70,7 @@ class Response
             return $this;
         }
 
+        header("HTTP/1.1 " . $this->statusCode . " " . self::STATUS_TEXT[$this->statusCode]);
         foreach ($this->headers as $name => $value) {
             header($name . ": " . $value);
         }
@@ -66,12 +87,21 @@ class Response
         $this->sendContent();
     }
 
-    public static function redirect(string $url, int $code = 302): Response
+    public static function redirect(string $url, int $status = 302)
     {
-        $response = App::getInstance()->make(static::class);
-        $response->setHeader("Location", $url);
-        $response->statusCode = $code;
-        $response->sendHeaders();
+        App::getInstance()->make(static::class)
+            ->setHeader("Location", $url)
+            ->setStatusCode($status)
+            ->sendHeaders();
+
         exit(1);
+    }
+
+    public static function JSON(mixed $data = [], int $status = 200, array $headers = []): Response
+    {
+        return App::getInstance()->make(static::class)
+            ->setHeaders($headers)
+            ->setStatusCode($status)
+            ->setContent(json_encode($data));
     }
 }

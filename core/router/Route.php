@@ -85,7 +85,8 @@ class Route
         return $this;
     }
 
-    public function prefix(string $prefix): static{
+    public function prefix(string $prefix): static
+    {
         $this->prefix = $prefix;
         return $this;
     }
