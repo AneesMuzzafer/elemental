@@ -9,6 +9,7 @@ use Core\Config\Config;
 use Core\Facade\Route;
 use Core\Helper\Pipeline;
 use Core\Request\Request;
+use Core\Response\Response;
 // use Core\Router\Route;
 // use Core\Router\Router;
 use Core\View\View;
@@ -39,12 +40,13 @@ Route::get("/abc", function (Request $request) {
 
     // dump($result, "abc");
 
-
-    return "end";
+    return Response::redirect("/");
+    // return "end";
     // return view("home", ["data" => "Allah-u-Akbar", "abc" => "def"])->withLayout("layout.layout");
 });
 
 Route::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
+Route::get("/abcs", [TestController::class, "store"]);
 
 Route::get("/db/{post:title}", function (Request $request, Post $post, Config $config) {
 

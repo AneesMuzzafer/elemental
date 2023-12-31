@@ -1,5 +1,6 @@
 <?php
 
+use Core\Response\Response;
 use Core\Router\Router;
 use Core\View\View;
 
@@ -28,15 +29,17 @@ function router()
     return app()->make(Router::class);
 }
 
-function auth()
+function view($name, $params = [])
 {
-    return "auth";
-}
-
-function view($name, $params = []){
     return View::make($name, $params);
 }
 
-function component($name, $params = []){
+function component($name, $params = [])
+{
     return View::make($name, $params)->view();
+}
+
+function redirect(string $url, int $code = 302)
+{
+    return Response::redirect($url, $code);
 }

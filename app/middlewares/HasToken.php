@@ -2,13 +2,12 @@
 
 namespace App\Middlewares;
 
+use Core\Request\Request;
+
 class HasToken
 {
     public function handle($request, \Closure $next)
     {
-
-        $request = $request . " processed in Has Token ";
-        echo ":" . $request . ": as in Has Token. ";
         return $next($request);
         // return $next($request);
     }

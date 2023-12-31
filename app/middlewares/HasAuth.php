@@ -9,7 +9,7 @@ class HasAuth
     public function handle(Request $request, \Closure $next)
     {
         if ($request->data()["auth"] != "yes") {
-            return ["code" => "unauthorized"];
+            return redirect("/");
         }
 
         return $next($request);

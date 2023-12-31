@@ -17,4 +17,8 @@ class TestController
         $msg = $mailService->send("Message from Test Controller");
         return "Resolved from Index of Test Controller  - " . $msg . "with route params " . "$x, $y, $z" . " and request params are " . $request->data()["start"];
     }
+
+    public function store(){
+        return redirect("/");
+    }
 }
