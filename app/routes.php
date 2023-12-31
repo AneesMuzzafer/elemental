@@ -67,7 +67,7 @@ Router::get("/db/{post:title}", function (Request $request, Post $post, Config $
 
     return [
         "status" => "success",
-        "post" => $post->getData(),
+        "post" => $post->data(),
         "request" => $request->data()
     ];
 });

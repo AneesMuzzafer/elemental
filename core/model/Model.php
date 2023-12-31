@@ -179,7 +179,7 @@ class Model
     }
 
 
-    public function getData()
+    public function data()
     {
         return $this->data;
     }
