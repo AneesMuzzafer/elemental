@@ -45,10 +45,8 @@ class Router
         require_once $path;
     }
 
-    public function resolveController(Request $request)
+    public function resolveController(Route $route, array $args)
     {
-        [$route, $args] = $this->resolveRoute($request);
-
         if ($route === null) {
             throw new RouterException("404! Route Not Found.");
         }

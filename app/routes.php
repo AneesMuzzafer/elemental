@@ -9,6 +9,7 @@ use Core\Config\Config;
 
 use Core\Helper\Pipeline;
 use Core\Request\Request;
+use Core\Router\Route;
 use Core\Router\Router;
 use Core\View\View;
 
@@ -25,14 +26,14 @@ Router::get("/user/{id}/posts/{post_id:slug}", function (Request $request,  Mail
 
 Router::get("/abc", function (Request $request) {
 
-    $result = (new Pipeline())
-        ->makePipeline([HasToken::class, HasAuth::class])
-        ->pass("req")
-        ->atLastRun(function ($request) {
-            return $request . "processed in then Closure .";
-        })->execute();
+    // $result = (new Pipeline())
+    //     ->makePipeline([HasToken::class, HasAuth::class])
+    //     ->pass("req")
+    //     ->atLastRun(function ($request) {
+    //         return $request . "processed in then Closure .";
+    //     })->execute();
 
-    dump($result, "abc");
+    // dump($result, "abc");
 
 
     return "end";
@@ -41,7 +42,7 @@ Router::get("/abc", function (Request $request) {
 
 Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
 
-Router::get("/db/{post:title}", function (Request $request, Post $post, Config $config) {
+Route::get("/db/{post:title}", function (Request $request, Post $post, Config $config) {
 
     // $post = Post::create([
     //     // "name" => "Anees"
@@ -71,3 +72,7 @@ Router::get("/db/{post:title}", function (Request $request, Post $post, Config $
         "request" => $request->data()
     ];
 });
+
+Route::get("/mw", function () {
+    return ["data" => "Dummy data here"];
+})->middleware([App\Middlewares\HasAuth::class]);

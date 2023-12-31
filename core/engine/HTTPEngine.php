@@ -2,6 +2,7 @@
 
 namespace Core\Engine;
 
+use Core\Helper\Pipeline;
 use Core\Main\App;
 use Core\Request\Request;
 use Core\Response\Response;
@@ -19,17 +20,28 @@ class HTTPEngine
 
     public function run(Request $request)
     {
+        [$route, $args] = $this->router->resolveRoute($request);
 
-        [$action, $resolvedArgs] = $this->router->resolveController($request);
+        $response = (new Pipeline())
+            ->makePipeline($route->getMiddleware())
+            ->pass($request)
+            ->atLastRun(function () use ($route, $args) {
+                return $this->process($route, $args);
+            })->execute();
 
+        return $this->prepareResponse($response, $request);
+    }
+
+    public function process($route, $args)
+    {
+        [$action, $resolvedArgs] = $this->router->resolveController($route, $args);
         try {
             $response = $this->app->resolveMethod($action, $resolvedArgs);
         } catch (\Throwable $e) {
             // $response = $this->app->make(Response::class);
             throw new \Exception(get_class($e) . " " . $e->getMessage());
         }
-
-        return $this->prepareResponse($response, $request);
+        return $response;
     }
 
 

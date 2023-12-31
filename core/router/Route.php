@@ -11,6 +11,8 @@ class Route
     public String $uri;
     public $action;
 
+    public array $middleware = [];
+
     public array $routeSegments = [];
 
     public function __construct(String $method, String $uri, array | callable $action)
@@ -66,5 +68,24 @@ class Route
 
             return $routeProp;
         }, $segments);
+    }
+
+
+    public static function get(String $uri, array | callable $action): static
+    {
+        $instance = new static("GET", $uri, $action);
+        $instance->router->addRoute("GET", $instance);
+        return $instance;
+    }
+
+    public function getMiddleware()
+    {
+        return $this->middleware;
+    }
+
+    public function middleware(array $middleware): static
+    {
+        $this->middleware = array_merge($this->middleware, $middleware);
+        return $this;
     }
 }

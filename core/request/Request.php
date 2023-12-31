@@ -13,7 +13,6 @@ use stdClass;
  */
 class Request
 {
-
     protected App $app;
 
     protected string $method;
@@ -46,14 +45,6 @@ class Request
     {
         $this->app = $app;
     }
-
-    // public static function getInstance()
-    // {
-    //     if (is_null(static::$instance)) {
-    //         static::$instance = new Request();
-    //     }
-    //     return static::$instance;
-    // }
 
     public static function read()
     {
@@ -162,7 +153,6 @@ class Request
             case "application/json":
                 $this->data = json_decode($this->rawContent, true);
                 $this->json = json_decode($this->rawContent);
-
                 break;
             case "application/xml":
                 $this->xml = simplexml_load_string($this->rawContent);
