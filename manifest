@@ -1,22 +1,41 @@
 <?php
 
-if ($argv[1] === "run") {
-    shell_exec(`php -S 127.0.0.1:8000`);
-} else if ($argv[1] === "tinker") {
+use Core\Console\Input;
+use Core\Engine\ConsoleEngine;
+use Core\Request\Request;
 
-    print_r("  Starting shell session:\n\n");
+require "./autoload.php";
 
-    while (true) {
-        $input = readline("> ");
+$app = require_once "./core/main/launch.php";
 
-        if ($input === "exit") {
-            break;
-        }
-        try {
-            $output = eval($input);
-            var_dump("= " . $output . "\n");
-        } catch (Throwable $e) {
-            print_r("= Could not be evaluated! Error:" . $e->getMessage() . "\n");
-        }
-    }
-}
+$engine = $app->make(ConsoleEngine::class);
+
+$input = Input::read($argv);
+
+$status = $engine->run($input);
+
+
+
+$app->terminate();
+
+
+// if ($argv[1] === "run") {
+//     shell_exec(`php -S 127.0.0.1:8000`);
+// } else if ($argv[1] === "tinker") {
+
+//     print_r("  Starting shell session:\n\n");
+
+//     while (true) {
+//         $input = readline("> ");
+
+//         if ($input === "exit") {
+//             break;
+//         }
+//         try {
+//             $output = eval($input);
+//             var_dump("= " . $output . "\n");
+//         } catch (Throwable $e) {
+//             print_r("= Could not be evaluated! Error:" . $e->getMessage() . "\n");
+//         }
+//     }
+// }
