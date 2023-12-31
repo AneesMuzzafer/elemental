@@ -4,10 +4,9 @@ use App\Controllers\TestController;
 use App\Middlewares\HasAuth;
 use App\Middlewares\HasToken;
 use App\Models\Post;
-use App\Models\Test;
 use App\Services\MailService;
-use Core\Database\Database;
-use Core\Database\DatabaseConnection;
+use Core\Config\Config;
+
 use Core\Helper\Pipeline;
 use Core\Request\Request;
 use Core\Router\Router;
@@ -42,7 +41,7 @@ Router::get("/abc", function (Request $request) {
 
 Router::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
 
-Router::get("/db/{post:title}", function (Request $request, Post $post) {
+Router::get("/db/{post:title}", function (Request $request, Post $post, Config $config) {
 
     // $post = Post::create([
     //     // "name" => "Anees"

@@ -2,6 +2,7 @@
 
 namespace Core\Main;
 
+use Core\Config\EnvironmentLoader;
 use Core\Router\Router;
 use ReflectionClass;
 
@@ -29,6 +30,8 @@ class App extends Container
         $this->router = Router::getInstance();
 
         $this->router->registerRoutes();
+
+        $this->make(EnvironmentLoader::class)->load();
     }
 
     public static function getInstance()

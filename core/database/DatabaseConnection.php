@@ -2,20 +2,23 @@
 
 namespace Core\Database;
 
+use Core\Config\Config;
 use PDO;
 
 class DatabaseConnection
 {
     protected PDO $pdo;
-    public function __construct()
+    public function __construct(Config $config)
     {
-        $servername = "127.0.0.1:33060";
-        $username = "root";
-        $password = "root";
+        $driver = $config->db["driver"];
+        $host = $config->db["host"];
+        $port = $config->db["port"];
+        $database = $config->db["database"];
+        $username = $config->db["username"];
+        $password = $config->db["password"];
 
         try {
-            $this->pdo = new PDO("mysql:host=$servername;dbname=laracast", $username, $password);
-            // $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = new PDO("$driver:host=$host:$port;dbname=$database", $username, $password);
         } catch (\PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
         }

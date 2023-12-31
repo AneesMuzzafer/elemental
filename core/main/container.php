@@ -17,6 +17,8 @@ class Container
         \Core\Response\Response::class,
         \Core\Database\DatabaseConnection::class,
         \Core\Database\Database::class,
+        \Core\Config\Config::class,
+        \Core\Config\EnvironmentLoader::class,
     ];
 
     protected array $resolvedInstances = [];
