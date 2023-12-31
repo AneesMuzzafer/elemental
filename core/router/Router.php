@@ -2,14 +2,13 @@
 
 namespace Core\Router;
 
+use Core\Exception\RouteNotFoundException;
 use Core\Exception\RouterException;
 use Core\Main\App;
 use Core\Request\Request;
 
 class Router
 {
-    public static ?self $instance = null;
-
     public array $routes = [
         "GET" => [],
         "POST" => [],
@@ -19,7 +18,13 @@ class Router
         "HEAD" => [],
     ];
 
-    private function __construct()
+    public array $attributes = [
+        "middleware" => [],
+        "prefix" => "",
+        "name" => "",
+    ];
+
+    public function __construct()
     {
     }
 
@@ -28,15 +33,17 @@ class Router
         if (!isset($this->routes[$method])) {
             throw new RouterException("Invalid Route Method!");
         }
+
+        if (isset($this->attributes["middleware"])) {
+            $route->middleware = $this->attributes["middleware"];
+        }
+
         $this->routes[$method][] = $route;
     }
 
     public static function getInstance(): self
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new static();
-        }
-        return static::$instance;
+        return App::getInstance()->make(static::class);
     }
 
     public function registerRoutes()
@@ -47,10 +54,6 @@ class Router
 
     public function resolveController(Route $route, array $args)
     {
-        if ($route === null) {
-            throw new RouterException("404! Route Not Found.");
-        }
-
         if (is_callable($route->action)) {
 
             $action = $route->action;
@@ -76,7 +79,6 @@ class Router
 
     public function resolveRoute(Request $request)
     {
-
         $method = $request->method();
         $requestURI = $request->uri();
 
@@ -93,13 +95,14 @@ class Router
             $segments = explode('/', $path);
         }
 
-
         foreach ($this->routes[$method] as $route) {
 
             if (count($route->routeSegments) !== count($segments)) continue;
 
+
             $flag = true;
             $args = [];
+
             for ($i = 0; $i < count($segments); $i++) {
                 $uriSegment = $route->routeSegments[$i];
                 $pathSegment = $segments[$i];
@@ -113,13 +116,12 @@ class Router
                     $flag = false;
                 };
             }
-
             if ($flag) {
                 return [$route, $args];
             }
         }
 
-        return null;
+        throw new RouteNotFoundException("404! The route with uri:$requestURI could not be found.");
     }
 
     public function getRoutes(): array
@@ -127,26 +129,61 @@ class Router
         return $this->routes;
     }
 
-    public static function get(String $uri, array | callable $action): static
+    public function setAttributes(array $attributes)
     {
-        $route = new Route("GET", $uri, $action);
-
-        $instance = self::$instance;
-
-        $instance->addRoute("GET", $route);
-
-        return $instance;
+        $this->attributes = $attributes;
     }
 
-    public static function post(String $uri, array | callable $action): static
+    public function getAttributes(): array
     {
+        return $this->attributes;
+    }
 
-        $route = new Route("POST", $uri, $action);
+    private function generateRoute(string $method, String $uri, array | callable $action): Route
+    {
+        $route = new Route($method, $uri, $action);
+        $this->addRoute($method, $route);
+        return $route;
+    }
 
-        $instance = self::$instance;
+    public function get(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("GET", $uri, $action);
+    }
 
-        $instance->addRoute("POST", $route);
+    public function post(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("POST", $uri, $action);
+    }
 
-        return $instance;
+    public function put(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("PUT", $uri, $action);
+    }
+
+    public function patch(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("PATCH", $uri, $action);
+    }
+
+    public function delete(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("'DELETE'", $uri, $action);
+    }
+
+    public function head(string $uri, array | callable $action): Route
+    {
+        return $this->generateRoute("HEAD", $uri, $action);
+    }
+
+    public function group(array $attributes, callable $callback)
+    {
+        $prevAttributes =  $this->getAttributes();
+
+        $this->setAttributes(array_merge_recursive($prevAttributes, $attributes));
+
+        $callback();
+
+        $this->setAttributes($prevAttributes);
     }
 }

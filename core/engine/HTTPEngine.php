@@ -15,11 +15,20 @@ class HTTPEngine
 
     public function __construct(private App $app)
     {
-        $this->router = Router::getInstance();
+        $this->router = $app->make(Router::class);
     }
 
     public function run(Request $request)
     {
+
+        foreach ($this->router->getRoutes()["GET"] as $route) {
+
+            dump($route->uri, "uri");
+            dump($route->middleware, "middleware");
+            dump($route->prefix, "prefix");
+            dump($route->name, "name");
+        }
+
         [$route, $args] = $this->router->resolveRoute($request);
 
         $response = (new Pipeline())

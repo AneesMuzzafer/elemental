@@ -1,4 +1,6 @@
 <?php
+
+use Core\Router\Router;
 use Core\View\View;
 
 function app()
@@ -23,7 +25,7 @@ function dump($instance, $msg = "")
 
 function router()
 {
-    return \Core\Router\Router::getInstance();
+    return app()->make(Router::class);
 }
 
 function auth()

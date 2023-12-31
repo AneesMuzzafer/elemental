@@ -4,20 +4,18 @@ namespace Core\Router;
 
 class Route
 {
-
-    protected Router $router;
-
     public String $method;
     public String $uri;
     public $action;
 
     public array $middleware = [];
+    public string $name = "";
+    public string $prefix = "";
 
     public array $routeSegments = [];
 
     public function __construct(String $method, String $uri, array | callable $action)
     {
-        $this->router = Router::getInstance();
         $this->method = $method;
         $this->uri = $uri;
         $this->action = $action;
@@ -70,14 +68,6 @@ class Route
         }, $segments);
     }
 
-
-    public static function get(String $uri, array | callable $action): static
-    {
-        $instance = new static("GET", $uri, $action);
-        $instance->router->addRoute("GET", $instance);
-        return $instance;
-    }
-
     public function getMiddleware()
     {
         return $this->middleware;
@@ -86,6 +76,17 @@ class Route
     public function middleware(array $middleware): static
     {
         $this->middleware = array_merge($this->middleware, $middleware);
+        return $this;
+    }
+
+    public function name(string $name): static
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function prefix(string $prefix): static{
+        $this->prefix = $prefix;
         return $this;
     }
 }

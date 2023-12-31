@@ -27,7 +27,7 @@ class App extends Container
     {
         self::$instance = $this;
 
-        $this->router = Router::getInstance();
+        $this->router = $this->make(Router::class);
 
         $this->router->registerRoutes();
 
