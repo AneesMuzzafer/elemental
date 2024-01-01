@@ -19,11 +19,10 @@ Route::get("/fac", function () {
 });
 
 Route::get("/", function () {
-    return view("Home")->withLayout("layout.layout");
+    return view("Welcome")->withLayout("layouts.DashboardLayout");
 });
 
-Route::get("/user/{id}/posts/{post_id:slug}", function (Request $request,  MailService $mailService, string $id, $postId, $nweid) {
-    $msg = $mailService->send("From Route Callback");
+Route::get("/user/{id}/posts/{post_id:slug}", function (Request $request, string $id, $postId, $nweid) {
     return $request;
     // return "From paramed route . " . $msg . "id is " . $id . " and post id is " . $postId . "--- "  ;
 });
@@ -50,7 +49,7 @@ Route::get("/abc", function (Request $request) {
 Route::get("/abc/{x}/def/{y}/ghi/{z}", [TestController::class, "index"]);
 Route::get("/abcs", [TestController::class, "store"]);
 
-Route::get("/db/{post:title}", function (Request $request, Post $post, Config $config) {
+Route::get("/db/{post:title}", function (Request $request, Config $config) {
 
     // $post = Post::create([
     //     // "name" => "Anees"
@@ -76,7 +75,6 @@ Route::get("/db/{post:title}", function (Request $request, Post $post, Config $c
 
     return [
         "status" => "success",
-        "post" => $post->data(),
         "request" => $request->data()
     ];
 });
