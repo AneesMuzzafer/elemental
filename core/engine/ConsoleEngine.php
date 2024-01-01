@@ -14,8 +14,9 @@ class ConsoleEngine
         $this->app->boot();
     }
 
-    public function run(Input $input): void
+    public function run(Input $input)
     {
-        $res = (new Commander($input->args))->resolveCommand();
+        $commander = new Commander($input->args);
+        $commander->resolveCommand();
     }
 }

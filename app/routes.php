@@ -18,9 +18,8 @@ Route::get("/fac", function () {
     return "Works! Alhumdullilah";
 });
 
-Route::get("/", function (MailService $mailService) {
-    $msg = $mailService->send("From Route Callback");
-    return "Rendered in /" . " -- " . $msg;
+Route::get("/", function () {
+    return view("Home")->withLayout("layout.layout");
 });
 
 Route::get("/user/{id}/posts/{post_id:slug}", function (Request $request,  MailService $mailService, string $id, $postId, $nweid) {
