@@ -1,13 +1,13 @@
 <?php
 
-use Core\Engine\HTTPEngine;
+use Core\Engine\WebEngine;
 use Core\Request\Request;
 
 require __DIR__ . "/../core/autoload.php";
 
 $app = require_once __DIR__ . "/../app/bootstrap/app.php";
 
-$engine = $app->make(HTTPEngine::class);
+$engine = $app->make(WebEngine::class);
 
 $request = Request::read();
 

@@ -3,16 +3,13 @@
 namespace Core\Engine;
 
 use App\Exceptions\Handler;
-use Core\Exception\ExceptionHandler;
 use Core\Helper\Pipeline;
 use Core\Main\Application;
 use Core\Request\Request;
-use Core\Response\Response;
 use Core\Response\ResponseGenerator;
 use Core\Router\Router;
-use Exception;
 
-class HTTPEngine
+class WebEngine
 {
     private Router $router;
 

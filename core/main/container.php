@@ -10,7 +10,7 @@ class Container
 {
     protected array $coreInstances = [
         Application::class,
-        \Core\Engine\HTTPEngine::class,
+        \Core\Engine\WebEngine::class,
         \Core\Engine\ConsoleEngine::class,
         \Core\Router\Router::class,
         \Core\Request\Request::class,
