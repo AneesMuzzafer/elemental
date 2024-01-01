@@ -9,7 +9,7 @@ use ReflectionClass;
 class Container
 {
     protected array $coreInstances = [
-        App::class,
+        Application::class,
         \Core\Engine\HTTPEngine::class,
         \Core\Engine\ConsoleEngine::class,
         \Core\Router\Router::class,
@@ -104,8 +104,8 @@ class Container
                 throw new \Exception("Failed to resolve class " . $key . ". " . $name . " is missing the type hint.");
             }
 
-            if ($type->getName() === App::class) {
-                return App::getInstance();
+            if ($type->getName() === Application::class) {
+                return Application::getInstance();
             }
 
 

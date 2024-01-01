@@ -3,7 +3,7 @@
 namespace Core\Helper;
 
 use Closure;
-use Core\Main\App;
+use Core\Main\Application;
 
 class Pipeline
 {
@@ -57,7 +57,7 @@ class Pipeline
 
         $class = $this->pipeline[$this->index];
 
-        $pipe = App::getInstance()->make($class);
+        $pipe = Application::getInstance()->make($class);
 
         return $pipe->handle($request, $this->next);
     }

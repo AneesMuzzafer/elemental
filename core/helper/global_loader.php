@@ -6,7 +6,7 @@ use Core\View\View;
 
 function app()
 {
-    return \Core\Main\App::getInstance();
+    return \Core\Main\Application::getInstance();
 }
 
 function console_log(...$msgs)
@@ -22,6 +22,12 @@ function dump($instance, $msg = "")
     echo '<pre style="background-color: #f4f4f4; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
     echo print_r($instance, true);
     echo "</pre>";
+}
+
+function dd($instance, $msg = "")
+{
+    dump($instance, $msg);
+    die(1);
 }
 
 function router()

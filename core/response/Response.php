@@ -2,7 +2,7 @@
 
 namespace Core\Response;
 
-use Core\Main\App;
+use Core\Main\Application;
 use Core\Request\Request;
 
 class Response
@@ -89,7 +89,7 @@ class Response
 
     public static function redirect(string $url, int $status = 302)
     {
-        App::getInstance()->make(static::class)
+        Application::getInstance()->make(static::class)
             ->setHeader("Location", $url)
             ->setStatusCode($status)
             ->sendHeaders();
@@ -99,7 +99,7 @@ class Response
 
     public static function JSON(mixed $data = [], int $status = 200, array $headers = []): Response
     {
-        return App::getInstance()->make(static::class)
+        return Application::getInstance()->make(static::class)
             ->setHeaders($headers)
             ->setStatusCode($status)
             ->setContent(json_encode($data));

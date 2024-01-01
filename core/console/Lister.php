@@ -2,7 +2,7 @@
 
 namespace Core\Console;
 
-use Core\Main\App;
+use Core\Main\Application;
 use Core\Router\Router;
 
 class Lister
@@ -10,7 +10,7 @@ class Lister
     private Router $router;
     public function __construct()
     {
-        $this->router = App::getInstance()->make(Router::class);
+        $this->router = Application::getInstance()->make(Router::class);
         $this->logRoutes();
     }
 

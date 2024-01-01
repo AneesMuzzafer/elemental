@@ -4,12 +4,12 @@ namespace Core\Engine;
 
 use Core\Console\Commander;
 use Core\Console\Input;
-use Core\Main\App;
+use Core\Main\Application;
 
 class ConsoleEngine
 {
 
-    public function __construct(public App $app)
+    public function __construct(public Application $app)
     {
         $this->app->boot();
     }

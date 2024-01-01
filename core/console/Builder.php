@@ -2,7 +2,7 @@
 
 namespace Core\Console;
 
-use Core\Main\App;
+use Core\Main\Application;
 
 class Builder
 {
@@ -33,7 +33,7 @@ class Builder
     public function generateModel()
     {
         console_log("Generating Model named $this->name.");
-        $dir = App::getInstance()->basePath() . "/app/models";
+        $dir = Application::getInstance()->basePath() . "/app/models";
         $content = $this->getModelContent();
 
         $this->createFile($dir, $this->name, $content);
@@ -42,7 +42,7 @@ class Builder
     public function generateController()
     {
         console_log("Generating Controller named $this->name.");
-        $dir = App::getInstance()->basePath() . "/app/controllers";
+        $dir = Application::getInstance()->basePath() . "/app/controllers";
 
         $content = $this->getControllerContent();
 
@@ -52,7 +52,7 @@ class Builder
     public function generateMiddleware()
     {
         console_log("Generating Middlware named $this->name.");
-        $dir = App::getInstance()->basePath() . "/app/middlewares";
+        $dir = Application::getInstance()->basePath() . "/app/middlewares";
 
         $content = $this->getMiddlewareContent();
 

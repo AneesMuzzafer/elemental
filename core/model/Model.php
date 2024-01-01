@@ -3,7 +3,7 @@
 namespace Core\Model;
 
 use Core\Database\Database;
-use Core\Main\App;
+use Core\Main\Application;
 use PDO;
 use ReflectionClass;
 
@@ -18,7 +18,7 @@ class Model
     public function __construct()
     {
         $this->tableName = $this->getTableNameFromClass();
-        $this->db = App::getInstance()->make(Database::class);
+        $this->db = Application::getInstance()->make(Database::class);
     }
 
     public function setData(array $data, $id = null)

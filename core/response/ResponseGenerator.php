@@ -2,7 +2,7 @@
 
 namespace Core\Response;
 
-use Core\Main\App;
+use Core\Main\Application;
 use Core\View\View;
 
 class ResponseGenerator
@@ -16,7 +16,7 @@ class ResponseGenerator
         if ($this->content instanceof Response) {
             $response = $this->content;
         } else {
-            $response = App::getInstance()->make(Response::class);
+            $response = Application::getInstance()->make(Response::class);
             if (is_scalar($this->content)) {
                 $content = (string) $this->content;
 

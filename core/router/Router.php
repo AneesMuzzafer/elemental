@@ -4,7 +4,7 @@ namespace Core\Router;
 
 use Core\Exception\RouteNotFoundException;
 use Core\Exception\RouterException;
-use Core\Main\App;
+use Core\Main\Application;
 use Core\Request\Request;
 
 class Router
@@ -45,12 +45,12 @@ class Router
 
     public static function getInstance(): self
     {
-        return App::getInstance()->make(static::class);
+        return Application::getInstance()->make(static::class);
     }
 
     public function registerRoutes()
     {
-        $path = App::getInstance()->basePath() . "/app/routes.php";
+        $path = Application::getInstance()->basePath() . "/app/routes.php";
         require_once $path;
     }
 
@@ -63,7 +63,7 @@ class Router
 
             [$controller, $method] = $route->action;
 
-            $controllerInstance = App::getInstance()->make($controller);
+            $controllerInstance = Application::getInstance()->make($controller);
 
             $action = [$controllerInstance, $method];
         }

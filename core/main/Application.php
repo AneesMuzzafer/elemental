@@ -6,9 +6,9 @@ use App\Bootstrap\AppServiceProvider;
 use Core\Config\EnvironmentLoader;
 use Core\Router\Router;
 
-class App extends Container
+class Application extends Container
 {
-    protected static ?App $instance = null;
+    protected static ?Application $instance = null;
 
     protected ?Router $router;
 
@@ -20,10 +20,9 @@ class App extends Container
             throw new \Core\Exception\AppException("App already initiated. Access the instance using App::getInstance() method");
         }
 
-
         $this->setBasePath();
 
-        $this->resolvedInstances[App::class] = $this;
+        $this->resolvedInstances[Application::class] = $this;
 
         $this->initializeApp();
     }

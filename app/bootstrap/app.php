@@ -1,6 +1,6 @@
 <?php
 
-$app = new \Core\Main\App();
+$app = new \Core\Main\Application();
 
 require $app->basePath() . "/core/helper/global_loader.php";
 

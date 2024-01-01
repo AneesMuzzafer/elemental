@@ -5,7 +5,7 @@ namespace Core\Engine;
 use App\Exceptions\Handler;
 use Core\Exception\ExceptionHandler;
 use Core\Helper\Pipeline;
-use Core\Main\App;
+use Core\Main\Application;
 use Core\Request\Request;
 use Core\Response\Response;
 use Core\Response\ResponseGenerator;
@@ -16,7 +16,7 @@ class HTTPEngine
 {
     private Router $router;
 
-    public function __construct(private App $app)
+    public function __construct(private Application $app)
     {
         $this->router = $app->make(Router::class);
         $this->app->boot();

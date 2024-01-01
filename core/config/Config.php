@@ -2,7 +2,7 @@
 
 namespace Core\Config;
 
-use Core\Main\App;
+use Core\Main\Application;
 
 class Config
 {
@@ -13,7 +13,7 @@ class Config
 
     public function __construct()
     {
-        $this->configPath = App::getInstance()->basePath() . "/app/config/config.php";
+        $this->configPath = Application::getInstance()->basePath() . "/app/config/config.php";
 
         if (!file_exists($this->configPath)) return;
 

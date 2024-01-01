@@ -3,7 +3,7 @@
 namespace Core\View;
 
 use Core\Exception\ViewNotFoundException;
-use Core\Main\App;
+use Core\Main\Application;
 
 class View
 {
@@ -69,7 +69,7 @@ class View
     public static function getPath($viewName)
     {
         $viewName = static::getCurrentPath($viewName);
-        $path = App::getInstance()->basePath() . "/app/views/" . $viewName . ".php";
+        $path = Application::getInstance()->basePath() . "/app/views/" . $viewName . ".php";
 
         if (!file_exists($path)) {
             throw new ViewNotFoundException("Could not find " . $viewName . ".php");
@@ -99,7 +99,7 @@ class View
         $this->layoutName = $layoutName;
         $layoutName = static::getCurrentPath($layoutName);
 
-        $layoutPath = App::getInstance()->basePath() . "/app/views/" . $layoutName . ".php";
+        $layoutPath = Application::getInstance()->basePath() . "/app/views/" . $layoutName . ".php";
 
         if (!file_exists($layoutPath)) {
             throw new ViewNotFoundException("Could not find " . $this->layoutName . ".php");

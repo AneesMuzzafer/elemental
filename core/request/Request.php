@@ -2,7 +2,7 @@
 
 namespace Core\Request;
 
-use Core\Main\App;
+use Core\Main\Application;
 use SimpleXMLElement;
 use stdClass;
 
@@ -13,7 +13,7 @@ use stdClass;
  */
 class Request
 {
-    protected App $app;
+    protected Application $app;
 
     protected string $method;
 
@@ -41,7 +41,7 @@ class Request
     protected ?string $remoteIP;
     protected ?string $remotePort;
 
-    public function __construct(App $app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
     }

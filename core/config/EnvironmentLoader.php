@@ -2,13 +2,13 @@
 
 namespace Core\Config;
 
-use Core\Main\App;
+use Core\Main\Application;
 
 class EnvironmentLoader
 {
     public function load(): void
     {
-        $path = App::getInstance()->basePath() . "/.env";
+        $path = Application::getInstance()->basePath() . "/.env";
 
         if (!file_exists($path)) return;
 

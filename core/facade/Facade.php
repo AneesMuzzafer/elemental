@@ -2,7 +2,7 @@
 
 namespace Core\Facade;
 
-use Core\Main\App;
+use Core\Main\Application;
 
 class Facade
 {
@@ -13,7 +13,7 @@ class Facade
 
         if ($facadeAccessor == "") return;
 
-        return App::getInstance()->make($facadeAccessor)->$name(...$args);
+        return Application::getInstance()->make($facadeAccessor)->$name(...$args);
     }
 
     protected static function getFacadeAccessor()
