@@ -21,4 +21,8 @@ class TestController
     public function store(){
         return redirect("/");
     }
+
+    public function fallback(){
+        return "fallback";
+    }
 }

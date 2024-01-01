@@ -18,6 +18,8 @@ class Router
         "HEAD" => [],
     ];
 
+    public $fallback;
+
     public array $attributes = [
         "middleware" => [],
         "prefix" => "",
@@ -121,6 +123,10 @@ class Router
             }
         }
 
+        if (isset($this->fallback)) {
+            return [$this->fallback, []];
+        }
+
         throw new RouteNotFoundException("404! The route with uri:$requestURI could not be found.");
     }
 
@@ -174,6 +180,13 @@ class Router
     public function head(string $uri, array | callable $action): Route
     {
         return $this->generateRoute("HEAD", $uri, $action);
+    }
+
+    public function fallback(array | callable $action)
+    {
+        $fallback = new Route("FALLBACK", "*", $action);
+        $this->fallback = $fallback;
+        return $fallback;
     }
 
     public function group(array $attributes, callable $callback)
