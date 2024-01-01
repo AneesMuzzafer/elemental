@@ -15,6 +15,6 @@ class ConsoleEngine
 
     public function run(Input $input): void
     {
-        $res =( new Commander($input->args))->resolveCommand();
+        $res = (new Commander($input->args))->resolveCommand();
     }
 }

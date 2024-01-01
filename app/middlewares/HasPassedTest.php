@@ -5,14 +5,9 @@ namespace App\Middlewares;
 use Closure;
 use Core\Request\Request;
 
-class HasAuth
-{
+class HasPassedTest {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->data()["auth"] != "yes") {
-            return redirect("/");
-        }
-
         return $next($request);
     }
 }

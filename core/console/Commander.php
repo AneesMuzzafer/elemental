@@ -6,7 +6,6 @@ class Commander
 {
 
     public $args = [];
-    const CREATION_COMMANDS = ["create:model", "create:controller", "create:middleware"];
 
     public function __construct(array $args)
     {
@@ -15,8 +14,8 @@ class Commander
 
     public function resolveCommand()
     {
-        if(!isset($this->args[0])) {
-            console_log("Missing the command. Use `php manifest help` to see the list of valid commands.");
+        if (!isset($this->args[0])) {
+            console_log("Missing the command argument. Use `php manifest help` to see the list of valid commands.");
             exit(1);
         }
 
@@ -37,15 +36,15 @@ class Commander
             return new Lister();
         }
 
-        if ($command === "diver") {
-            return new Diver();
-        }
-
         if ($command === "help") {
             return new Helper();
         }
 
-        if (in_array($command, self::CREATION_COMMANDS)) {
+        if (in_array($command, Builder::BUILD_COMMANDS)) {
+            if (!isset($this->args[1])) {
+                console_log("Please specify a name for the resource you want to build.");
+                exit(1);
+            }
             return new Builder($command, $this->args[1]);
         }
 
