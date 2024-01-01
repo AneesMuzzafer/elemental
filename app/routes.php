@@ -99,4 +99,4 @@ Route::group(["middleware" => [App\Middlewares\HasAuth::class]], function () {
     })->middleware([App\Middlewares\HasToken::class])->prefix("pfix");
 });
 
-Route::fallback([TestController::class, "fallback"]);
+// Route::fallback([TestController::class, "fallback"]);

@@ -2,12 +2,15 @@
 
 namespace Core\Engine;
 
+use App\Exceptions\Handler;
+use Core\Exception\ExceptionHandler;
 use Core\Helper\Pipeline;
 use Core\Main\App;
 use Core\Request\Request;
 use Core\Response\Response;
 use Core\Response\ResponseGenerator;
 use Core\Router\Router;
+use Exception;
 
 class HTTPEngine
 {
@@ -20,14 +23,18 @@ class HTTPEngine
 
     public function run(Request $request)
     {
-        [$route, $args] = $this->router->resolveRoute($request);
+        try {
+            [$route, $args] = $this->router->resolveRoute($request);
 
-        $response = (new Pipeline())
-            ->makePipeline($route->getMiddleware())
-            ->pass($request)
-            ->atLastRun(function () use ($route, $args) {
-                return $this->process($route, $args);
-            })->execute();
+            $response = (new Pipeline())
+                ->makePipeline($route->getMiddleware())
+                ->pass($request)
+                ->atLastRun(function () use ($route, $args) {
+                    return $this->process($route, $args);
+                })->execute();
+        } catch (\Throwable $e) {
+            $response = $this->app->make(Handler::class)->handleException($e);
+        }
 
         return $this->prepareResponse($response, $request);
     }
@@ -35,13 +42,7 @@ class HTTPEngine
     public function process($route, $args)
     {
         [$action, $resolvedArgs] = $this->router->resolveController($route, $args);
-        try {
-            $response = $this->app->resolveMethod($action, $resolvedArgs);
-        } catch (\Throwable $e) {
-            // $response = $this->app->make(Response::class);
-            throw new \Exception(get_class($e) . " " . $e->getMessage());
-        }
-        return $response;
+        return $this->app->resolveMethod($action, $resolvedArgs);
     }
 
 

@@ -127,7 +127,7 @@ class Router
             return [$this->fallback, []];
         }
 
-        throw new RouteNotFoundException("404! The route with uri:$requestURI could not be found.");
+        throw new RouteNotFoundException("404! The route with uri: '$requestURI' could not be found.");
     }
 
     public function getRoutes(): array
