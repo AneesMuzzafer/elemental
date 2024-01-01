@@ -50,7 +50,7 @@ class Router
 
     public function registerRoutes()
     {
-        $path = str_replace("\\", "/", getcwd()) . "/app/routes.php";
+        $path = App::getInstance()->basePath() . "/app/routes.php";
         require_once $path;
     }
 

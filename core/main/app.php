@@ -2,10 +2,9 @@
 
 namespace Core\Main;
 
-use App\Providers\AppServiceProvider;
+use App\Bootstrap\AppServiceProvider;
 use Core\Config\EnvironmentLoader;
 use Core\Router\Router;
-use ReflectionClass;
 
 class App extends Container
 {
@@ -13,11 +12,16 @@ class App extends Container
 
     protected ?Router $router;
 
+    private $basePath;
+
     public function __construct()
     {
         if (self::$instance != null) {
             throw new \Core\Exception\AppException("App already initiated. Access the instance using App::getInstance() method");
         }
+
+
+        $this->setBasePath();
 
         $this->resolvedInstances[App::class] = $this;
 
@@ -47,6 +51,20 @@ class App extends Container
             self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    public function setBasePath()
+    {
+        if (basename(getcwd()) == "public") {
+            $this->basePath = dirname(str_replace("\\", "/", getcwd()));
+        } else {
+            $this->basePath = str_replace("\\", "/", getcwd());
+        }
+    }
+
+    public function basePath()
+    {
+        return $this->basePath;
     }
 
     public function terminate()

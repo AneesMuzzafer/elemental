@@ -1,10 +1,8 @@
 <?php
 
-use Core\Main\App;
+$app = new \Core\Main\App();
 
-$app = new App();
-
-require str_replace("\\", "/", getcwd()) . "/core/helper/global_loader.php";
+require $app->basePath() . "/core/helper/global_loader.php";
 
 // $app->bind(HTTPEngine::class, function () use ($app) {
 //     return new HTTPEngine($app);

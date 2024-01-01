@@ -11,16 +11,14 @@ class Lister
     public function __construct()
     {
         $this->router = App::getInstance()->make(Router::class);
-
         $this->logRoutes();
     }
-
 
     private function logRoutes()
     {
         $routes = $this->router->getRoutes();
         $r = 0;
-        console_log("Generating list of registerd routes:");
+        console_log("Generating list of registered routes:");
         foreach ($routes as $method => $methodRoutes) {
             console_log("$method:\t Routes = " . count($methodRoutes));
             $i = 1;

@@ -11,6 +11,7 @@ class ConsoleEngine
 
     public function __construct(public App $app)
     {
+        $this->app->boot();
     }
 
     public function run(Input $input): void

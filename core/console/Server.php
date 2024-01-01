@@ -5,10 +5,12 @@ namespace Core\Console;
 class Server
 {
     private string $host = "127.0.0.1";
-    private int $port = 8001;
+    private int $port = 8000;
 
     public function __construct($arg1 = null, $arg2 = null)
     {
+        $this->port = $this->getAvailablePort();
+
         if (!is_null($arg1)) {
             $this->parseArg($arg1);
         }
@@ -17,9 +19,11 @@ class Server
             $this->parseArg($arg2);
         }
 
-        $this->port = $this->getAvailablePort();
+        console_log("Starting server on http://$this->host:$this->port");
+        console_log("Press Ctrl+C to stop the server.");
 
-        console_log($this->host, $this->port);
+        $command = "php -S $this->host:$this->port -t public";
+        shell_exec($command);
     }
 
     private function getAvailablePort(): int

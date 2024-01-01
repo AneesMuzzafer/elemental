@@ -3,9 +3,9 @@
 use Core\Engine\HTTPEngine;
 use Core\Request\Request;
 
-require "./autoload.php";
+require __DIR__ . "/../core/autoload.php";
 
-$app = require_once "./core/main/launch.php";
+$app = require_once __DIR__ . "/../app/bootstrap/app.php";
 
 $engine = $app->make(HTTPEngine::class);
 

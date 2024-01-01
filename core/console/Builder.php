@@ -2,6 +2,8 @@
 
 namespace Core\Console;
 
+use Core\Main\App;
+
 class Builder
 {
     private string $resource;
@@ -31,7 +33,7 @@ class Builder
     public function generateModel()
     {
         console_log("Generating Model named $this->name.");
-        $dir = str_replace("\\", "/", getcwd()) . "/app/models";
+        $dir = App::getInstance()->basePath() . "/app/models";
         $content = $this->getModelContent();
 
         $this->createFile($dir, $this->name, $content);
@@ -40,7 +42,7 @@ class Builder
     public function generateController()
     {
         console_log("Generating Controller named $this->name.");
-        $dir = str_replace("\\", "/", getcwd()) . "/app/controllers";
+        $dir = App::getInstance()->basePath() . "/app/controllers";
 
         $content = $this->getControllerContent();
 
@@ -50,7 +52,7 @@ class Builder
     public function generateMiddleware()
     {
         console_log("Generating Middlware named $this->name.");
-        $dir = str_replace("\\", "/", getcwd()) . "/app/middlewares";
+        $dir = App::getInstance()->basePath() . "/app/middlewares";
 
         $content = $this->getMiddlewareContent();
 

@@ -48,6 +48,10 @@ class Container
             return $this->resolveInstance($key);
         }
 
+        if (in_array($key, $this->instances)) {
+            return $this->resolveInstance($key);
+        }
+
         if (array_key_exists($key, $this->bindings)) {
 
             $value = $this->bindings[$key];
