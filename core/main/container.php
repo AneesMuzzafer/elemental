@@ -2,7 +2,7 @@
 
 namespace Core\Main;
 
-use Core\Exception\ModelNotFound;
+use Core\Exception\ModelNotFoundException;
 use Core\Model\Model;
 use ReflectionClass;
 
@@ -171,7 +171,7 @@ class Container
                         $foundModel = $model->where([$arg["binding"] => $arg["value"]]);
                     }
                     if (is_null($foundModel)) {
-                        throw new ModelNotFound("No model could be found with the given parameters");
+                        throw new ModelNotFoundException("No model could be found with the given parameters");
                     }
                     return $foundModel;
                 }

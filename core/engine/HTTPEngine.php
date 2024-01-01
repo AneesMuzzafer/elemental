@@ -19,6 +19,7 @@ class HTTPEngine
     public function __construct(private App $app)
     {
         $this->router = $app->make(Router::class);
+        $this->app->boot();
     }
 
     public function run(Request $request)

@@ -2,6 +2,7 @@
 
 namespace Core\Main;
 
+use App\Providers\AppServiceProvider;
 use Core\Config\EnvironmentLoader;
 use Core\Router\Router;
 use ReflectionClass;
@@ -29,9 +30,15 @@ class App extends Container
 
         $this->router = $this->make(Router::class);
 
-        $this->router->registerRoutes();
-
         $this->make(EnvironmentLoader::class)->load();
+    }
+
+    public function boot()
+    {
+        $this->router->registerRoutes();
+        $appServiceProvider = $this->make(AppServiceProvider::class);
+        $appServiceProvider->register();
+        $appServiceProvider->boot();
     }
 
     public static function getInstance()

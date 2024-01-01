@@ -2,6 +2,6 @@
 
 namespace Core\Exception;
 
-class ModelNotFound extends \Exception
+class ModelNotFoundException extends \Exception
 {
 }
