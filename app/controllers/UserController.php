@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class PostController {
+class UserController {
 
     public function index()
     {
