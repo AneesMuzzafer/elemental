@@ -10,8 +10,6 @@ class Container
 {
     protected array $coreInstances = [
         Application::class,
-        \Core\Engine\WebEngine::class,
-        \Core\Engine\ConsoleEngine::class,
         \Core\Router\Router::class,
         \Core\Request\Request::class,
         \Core\Response\Response::class,
@@ -35,7 +33,7 @@ class Container
         }
     }
 
-    public function bindSingleton(string $key, String | callable $value)
+    public function singleton(string $key, String | callable $value)
     {
         if (!isset($this->instances[$key])) {
             $this->instances[$key] = $value;
@@ -48,8 +46,8 @@ class Container
             return $this->resolveInstance($key);
         }
 
-        if (in_array($key, $this->instances)) {
-            return $this->resolveInstance($key);
+        if (array_key_exists($key, $this->instances)) {
+            return $this->resolveInstance($this->instances[$key]);
         }
 
         if (array_key_exists($key, $this->bindings)) {

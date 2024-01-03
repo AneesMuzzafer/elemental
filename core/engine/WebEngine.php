@@ -4,12 +4,14 @@ namespace Core\Engine;
 
 use App\Exceptions\Handler;
 use Core\Helper\Pipeline;
+use Core\Interfaces\WebEngineContract;
 use Core\Main\Application;
 use Core\Request\Request;
+use Core\Response\Response;
 use Core\Response\ResponseGenerator;
 use Core\Router\Router;
 
-class WebEngine
+class WebEngine implements WebEngineContract
 {
     private Router $router;
 
@@ -19,7 +21,7 @@ class WebEngine
         $this->app->boot();
     }
 
-    public function run(Request $request)
+    public function run(Request $request): Response
     {
         try {
             [$route, $args] = $this->router->resolveRoute($request);
@@ -31,10 +33,11 @@ class WebEngine
                     return $this->process($route, $args);
                 })->execute();
         } catch (\Throwable $e) {
+
             $response = $this->app->make(Handler::class)->handleException($e);
         }
 
-        return $this->prepareResponse($response, $request);
+        return $this->prepareResponse($response);
     }
 
     public function process($route, $args)
@@ -44,7 +47,7 @@ class WebEngine
     }
 
 
-    public function prepareResponse($response, $request)
+    public function prepareResponse($response)
     {
         $response = (new ResponseGenerator($response))->toResponse();
         return $response;
