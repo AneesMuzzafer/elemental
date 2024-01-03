@@ -15,12 +15,12 @@ class Commander
     public function resolveCommand()
     {
         if (!isset($this->args[0])) {
-            console_log("Missing the command argument. Use `php manifest help` to see the list of valid commands.");
+            console_log("Missing the command argument. Use `php candle help` to see the list of valid commands.");
             exit(1);
         }
 
         $command = $this->args[0];
-        if ($command === "start") {
+        if ($command === "ignite") {
             if (isset($this->args[1])) {
                 $arg1 = $this->args[1];
             }
