@@ -17,6 +17,7 @@ class Container
         \Core\Database\Database::class,
         \Core\Config\Config::class,
         \Core\Config\EnvironmentLoader::class,
+        \Core\Console\Commander::class
     ];
 
     protected array $resolvedInstances = [];

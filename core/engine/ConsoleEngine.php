@@ -9,7 +9,6 @@ use Core\Main\Application;
 
 class ConsoleEngine implements ConsoleEngineContract
 {
-
     public function __construct(public Application $app)
     {
         $this->app->boot();
@@ -17,7 +16,8 @@ class ConsoleEngine implements ConsoleEngineContract
 
     public function run(Input $input): void
     {
-        $commander = new Commander($input->args);
+        $commander = $this->app->make(Commander::class)->setArgs($input->args);
+        $commander->registerCommands();
         $commander->resolveCommand();
     }
 }

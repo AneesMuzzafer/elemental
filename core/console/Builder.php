@@ -9,7 +9,7 @@ class Builder
     private string $resource;
     private string $name;
 
-    const BUILD_COMMANDS = ["build:model", "build:controller", "build:middleware"];
+    const BUILD_COMMANDS = ["build:model", "build:controller", "build:middleware", "build:command"];
 
     public function __construct(string $resource, string $name)
     {
@@ -27,6 +27,8 @@ class Builder
                 return $this->generateController();
             case self::BUILD_COMMANDS[2]:
                 return $this->generateMiddleware();
+            case self::BUILD_COMMANDS[3]:
+                return $this->generateCommand();
         }
     }
 
@@ -55,6 +57,16 @@ class Builder
         $dir = Application::getInstance()->basePath() . "/app/middlewares";
 
         $content = $this->getMiddlewareContent();
+
+        $this->createFile($dir, $this->name, $content);
+    }
+
+    public function generateCommand()
+    {
+        console_log("Generating Command named $this->name.");
+        $dir = Application::getInstance()->basePath() . "/app/commands";
+
+        $content = $this->getCommandContent();
 
         $this->createFile($dir, $this->name, $content);
     }
@@ -116,6 +128,31 @@ class $this->name {
     public function handle(Request \$request, Closure \$next)
     {
         return \$next(\$request);
+    }
+}";
+    }
+
+    private function getCommandContent()
+    {
+        return "<?php
+
+namespace App\Commands;
+
+use Core\Console\Command;
+use Core\Console\Commander;
+
+class $this->name extends Command {
+
+    protected \$key = \"command_name\";
+
+    public function __construct(private Commander \$commander)
+    {
+        parent::__construct();
+    }
+
+    public function handle()
+    {
+         //handle command here!
     }
 }";
     }

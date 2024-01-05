@@ -2,14 +2,17 @@
 
 namespace Core\Console;
 
+use Core\Main\Application;
+
 class Commander
 {
 
     public $args = [];
 
-    public function __construct(array $args)
+    private array $commands = [];
+
+    public function __construct()
     {
-        $this->args = $args;
     }
 
     public function resolveCommand()
@@ -37,7 +40,7 @@ class Commander
         }
 
         if ($command === "help") {
-            return new Helper();
+            return new Helper($this->commands);
         }
 
         if (in_array($command, Builder::BUILD_COMMANDS)) {
@@ -48,6 +51,44 @@ class Commander
             return new Builder($command, $this->args[1]);
         }
 
+        if (array_key_exists($command, $this->commands)) {
+            $instance = $this->commands[$command];
+
+            if (method_exists($instance, "handle")) {
+                return $instance->handle($this->args);
+            }
+        }
+
         console_log("Could not find any valid action for " . $command . " command.");
+    }
+
+    public function setArgs($args)
+    {
+        $this->args = $args;
+        return $this;
+    }
+
+    public function getArgs() {
+        return $this->args;
+    }
+
+    public function registerCommands()
+    {
+        $app =  Application::getInstance();
+        $commands = require $app->basePath() . "./app/commands/Commands.php";
+
+        foreach ($commands as $command) {
+            $app->make($command);
+        }
+    }
+
+    public function addCommand($key, $instance)
+    {
+        $this->commands[$key] = $instance;
+    }
+
+    public function getInstance($key)
+    {
+        return $this->commands[$key];
     }
 }
