@@ -48,7 +48,22 @@ class Container
         }
 
         if (array_key_exists($key, $this->instances)) {
-            return $this->resolveInstance($this->instances[$key]);
+            $value = $this->instances[$key];
+
+            if (isset($this->resolvedInstances[$key])) {
+                return $this->resolvedInstances[$key];
+            }
+
+            if (is_callable($value)) {
+                $instance = call_user_func($value);
+            } else {
+                $instance = $this->resolve($value);
+            }
+
+            if ($instance instanceof $key) {
+                $this->resolvedInstances[$key] = $instance;
+                return $instance;
+            }
         }
 
         if (array_key_exists($key, $this->bindings)) {

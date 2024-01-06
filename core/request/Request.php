@@ -88,7 +88,6 @@ class Request
         if (!is_array($_REQUEST)) return;
 
         foreach ($_REQUEST as $key => $value) {
-            $this->{$key} = $value;
             $this->data[$key] = $value;
         }
     }
