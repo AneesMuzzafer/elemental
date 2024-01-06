@@ -119,7 +119,6 @@ class Request
         if (!is_array($_GET)) return;
 
         foreach ($_GET as $key => $value) {
-            $this->{$key} = $value;
             $this->data[$key] = $value;
         }
     }
@@ -129,7 +128,6 @@ class Request
         if (!is_array($_POST)) return;
 
         foreach ($_POST as $key => $value) {
-            $this->{$key} = $value;
             $this->data[$key] = $value;
         }
     }
@@ -246,5 +244,14 @@ class Request
     public function port()
     {
         return $this->remotePort;
+    }
+
+    public function __get($name)
+    {
+        if (!isset($this->data[$name])) {
+            return null;
+        }
+
+        return $this->data[$name];
     }
 }
