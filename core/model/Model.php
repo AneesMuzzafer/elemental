@@ -178,6 +178,17 @@ class Model
         }
     }
 
+    public static function all() {
+        $model = new static();
+
+        $sql = "SELECT * FROM $model->tableName";
+        $statement = $model->db->prepare($sql);
+        $statement->execute();
+
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
 
     public function data()
     {
