@@ -3,6 +3,7 @@
 namespace Core\Model;
 
 use Core\Database\Database;
+use Core\Exception\ModelNotFoundException;
 use Core\Main\Application;
 use PDO;
 use ReflectionClass;
@@ -58,7 +59,7 @@ class Model
 
         $data = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if(empty($data)) {
+        if (empty($data)) {
             return null;
         }
 
@@ -69,9 +70,8 @@ class Model
     public function save()
     {
         $sql = $this->getSQL();
+
         $statement = $this->db->prepare($sql);
-
-
 
         foreach ($this->data as $column => $value) {
             $statement->bindValue(':' . $column, $value);
@@ -112,7 +112,7 @@ class Model
         $model = static::find($id);
 
         if (is_null($model)) {
-            throw new \Exception("No model could be found with the given 'id'.");
+            throw new ModelNotFoundException("No model could be found with the given 'id'.");
         }
 
         $model->data = $data;
@@ -147,7 +147,7 @@ class Model
         $model = static::find($id);
 
         if (is_null($model)) {
-            throw new \Exception("No model could be found with the given 'id'.");
+            throw new ModelNotFoundException("No model could be found with the given 'id'.");
         }
         $model->data[$model->primaryKey] = $id;
         return $model->destroy();
@@ -157,12 +157,24 @@ class Model
     {
         $model = new static();
 
-        $whereClause = implode(' AND ', array_map(fn ($column) => "$column = :$column", array_keys($conditions)));
+        $validOperators = ['=', '!=', '<', '>', '<=', '>=', "LIKE", "IS NULL", "IS NOT NULL"];
 
-        $sql = "SELECT * FROM $model->tableName WHERE $whereClause;";
+        $whereConditions = [];
+        foreach ($conditions as $column => $condition) {
+            list($operator, $value) = is_array($condition) ? $condition : ['=', $condition];
+
+            $operator = in_array($operator, $validOperators) ? $operator : '=';
+
+            $whereConditions[] = "$column $operator :$column";
+        }
+
+        $whereClause = implode(' AND ', $whereConditions);
+
+        $sql = "SELECT * FROM {$model->tableName} WHERE $whereClause;";
         $statement = $model->db->prepare($sql);
 
-        foreach ($conditions as $column => $value) {
+        foreach ($conditions as $column => $condition) {
+            list($operator, $value) = is_array($condition) ? $condition : ['=', $condition];
             $statement->bindValue(':' . $column, $value);
         }
 
@@ -178,14 +190,55 @@ class Model
         }
     }
 
-    public static function all() {
+    public static function all($fetchMethod = PDO::FETCH_ASSOC)
+    {
         $model = new static();
 
         $sql = "SELECT * FROM $model->tableName";
         $statement = $model->db->prepare($sql);
         $statement->execute();
 
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll($fetchMethod);
+
+        return $data;
+    }
+
+    public static function allWhere(array $conditions = [], array $options = [], $fetchMethod = PDO::FETCH_ASSOC)
+    {
+        $model = new static();
+
+        $validOperators = ['=', '!=', '<', '>', '<=', '>=', "LIKE", "IS NULL", "IS NOT NULL"];
+
+        $whereConditions = [];
+        foreach ($conditions as $column => $condition) {
+            list($operator, $value) = is_array($condition) ? $condition : ['=', $condition];
+
+            $operator = in_array($operator, $validOperators) ? $operator : '=';
+
+            $whereConditions[] = "$column $operator :$column";
+        }
+
+        $whereClause = "";
+        if (count($conditions) > 0) {
+            $whereClause = "WHERE " . implode(' AND ', $whereConditions);
+        }
+
+        $orderBy = isset($options['orderBy']) ? 'ORDER BY ' . $options['orderBy'] . ' ' . ($options['sortDir'] ?? 'ASC') : '';
+        $limit = isset($options['limit']) ? 'LIMIT ' . $options['limit'] : '';
+        $offset = isset($options['offset']) ? 'OFFSET ' . $options['offset'] : '';
+
+        $sql = "SELECT * FROM $model->tableName $whereClause $orderBy $limit $offset;";
+
+        $statement = $model->db->prepare($sql);
+
+        foreach ($conditions as $column => $condition) {
+            list($operator, $value) = is_array($condition) ? $condition : ['=', $condition];
+            $statement->bindValue(':' . $column, $value);
+        }
+
+        $statement->execute();
+
+        $data = $statement->fetchAll($fetchMethod);
 
         return $data;
     }
