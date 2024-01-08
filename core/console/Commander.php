@@ -55,7 +55,8 @@ class Commander
             $instance = $this->commands[$command];
 
             if (method_exists($instance, "handle")) {
-                return $instance->handle($this->args);
+                $action = [$instance, "handle"];
+                return app()->resolveMethod($action, []);
             }
         }
 

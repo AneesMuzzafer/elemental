@@ -20,10 +20,6 @@ class Command
         }
     }
 
-    public function handle()
-    {
-    }
-
     public function getKey(){
         if(!isset($this->key)) return null;
 
