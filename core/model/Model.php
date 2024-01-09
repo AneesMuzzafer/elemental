@@ -115,7 +115,10 @@ class Model
             throw new ModelNotFoundException("No model could be found with the given 'id'.");
         }
 
-        $model->data = $data;
+        foreach($data as $key => $value) {
+            $model->data[$key] = $value;
+        }
+
         return $model->save();
     }
 
