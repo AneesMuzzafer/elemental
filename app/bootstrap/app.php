@@ -5,7 +5,7 @@ use Core\Engine\WebEngine;
 use Core\Interfaces\ConsoleEngineContract;
 use Core\Interfaces\WebEngineContract;
 
-$app = new \Core\Main\Application();
+$app = new Core\Main\Application();
 
 require $app->basePath() . "/core/helper/global_loader.php";
 

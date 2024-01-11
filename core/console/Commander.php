@@ -76,7 +76,7 @@ class Commander
     public function registerCommands()
     {
         $app =  Application::getInstance();
-        $commands = require $app->basePath() . "./app/commands/Commands.php";
+        $commands = require $app->basePath() . "/app/commands/Commands.php";
 
         foreach ($commands as $command) {
             $app->make($command);

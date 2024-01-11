@@ -3,9 +3,9 @@
 use Core\Console\Input;
 use Core\Engine\ConsoleEngine;
 
-require __DIR__ . "./core/autoload.php";
+require __DIR__ . "/core/autoload.php";
 
-$app = require_once __DIR__ . "./app/bootstrap/app.php";
+$app = require_once __DIR__ . "/app/bootstrap/app.php";
 
 $engine = $app->make(ConsoleEngine::class);
 
