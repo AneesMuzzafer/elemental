@@ -1582,6 +1582,111 @@ return  redirect('/home');
 
 
 
+## Exception Handler:
+
+
+Elemental provides a convenient way to handle all the exceptions thrown by the app.
+
+The `handle` method of `App\Exceptions\Handler` class is where all exceptions thrown by your application pass through before being rendered to the user. By default, exceptions thrown by the app will be formatted, and a structured response will be sent back to the browser. However, inside the handle method, you can intercept any exception and perform custom logic before the response is sent back.
+
+You can even send back a custom view or a response.
+
+### Handler Class
+
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Core\Exception\ExceptionHandler;
+
+class Handler extends ExceptionHandler
+{
+    public function handle($e)
+    {
+        // Perform some processing here
+
+        // You can customize the handling of exceptions based on your requirements
+    }
+}
+```
+
+#### Handling Specific Exceptions
+
+Elemental has defined some specific exception classes by default:
+
+- `AppException`
+- `ModelNotFoundException`
+- `RouteNotFoundException`
+- `RouterException`
+- `ViewNotFoundException`
+
+If you need to handle different types of exceptions in different ways, you can modify the `handle` method accordingly:
+
+```php
+<?php
+
+class Handler extends ExceptionHandler
+{
+    public function handle($e)
+    {
+        if ($e instanceof ModelNotFoundException || $e instanceof RouteNotFoundException) {
+            return view("404")->withLayout("layouts.DashboardLayout");
+        }
+
+        if ($e instanceof ViewNotFoundException) {
+            return view("Home");
+        }
+
+        // Handle other specific exceptions as needed
+    }
+}
+```
+
+You are free to create your own exception classes by extending from the base `Exception` class, which can then be handled as required.
+
+Feel free to customize the `handle` method based on your application's specific needs.
+
+## Configuration:
+
+All configuration settings for the application are centralized in the `app\config\config.php` file. These configurations cover various aspects such as database connection information and other core settings essential for your app.
+
+### Environment-specific Configuration
+
+To cater to different environments where the application might run, a `.env.example` file is provided in the root directory. This file outlines common environment variables that can be configured. If you are working in a team, it's recommended to include the `.env.example` file with placeholder values. This makes it clear to other developers which environment variables are required to run the application.
+
+When your application receives a request, all the variables listed in the `.env` file will be loaded into the `$_ENV` PHP super-global. You can then use the `getenv` function to retrieve values from these variables in your configuration files.
+
+```php
+$appName = getenv("APP_NAME");
+```
+
+### Accessing Configuration Values
+
+To access configuration values, you can use type-hinting and inject the `Core\Config\Config` class into your constructors, controller methods, or route closures.
+
+```php
+use Core\Config\Config;
+
+class YourClass {
+
+    public function __construct(Config $config) {
+        $driver = $config->db["driver"];
+        $host = $config->db["host"];
+        $port = $config->db["port"];
+    }
+
+    // Your other methods or code here
+}
+```
+
+By doing this, you have a clean and organized way to retrieve configuration values within your application.
+
+
+This approach keeps your configuration centralized and allows for easy changes based on the environment. It also promotes a clean and maintainable codebase.
+
+
+
 ## Facades:
 
 Elemental introduces a Facade system inspired by Laravel, providing a convenient and expressive static interface to classes within the application's Dependency Injection (DI) container. Facades act as static proxies to classes in the service container, offering a balance between a concise syntax and the testability and flexibility of traditional static methods.
@@ -1625,9 +1730,6 @@ class PaymentGatewayFacade extends Facade
 ```
 
 Now, you can access the instance methods of your custom class by calling static methods on the corresponding `FacadeClass`.
-## Exception Handler:
-
-Understand how Elemental handles exceptions. [Learn more](docs/exception-handler.md) about customizing error handling in your application.
 
 ## Inspiration:
 
