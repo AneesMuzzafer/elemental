@@ -974,7 +974,7 @@ Elemental offers a robust Object-Relational Mapper (ORM) that effectively abstra
 
 All the configurations for your Elemental App are located in your application's `app/config/config.php` configuration file. Here you may define all of your database connections, as well as specify which connection should be used by default. Most of the configuration options within this file are driven by the values of your application's environment variables.
 
-### Configuration
+### Database Configuration
 
 All the configurations for your Elemental App are located in your application's `app/config/config.php` configuration file. Here you may define all of your database connections, as well as specify which connection should be used by default. Most of the configuration options within this file are driven by the values of your application's environment variables.
 
