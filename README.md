@@ -1300,7 +1300,7 @@ $user_data = $user->data();
 
 ## Candle (Command Line Engine)
 
-Candle is the command line engine of the Elemental. Candle exists at the root of your application as the `candle` script and provides a number of helpful commands designed to aid you in the development process of your application. To view a list of all available Artisan commands, you may use the `help` command:
+Candle is the command line engine of the Elemental. Candle exists at the root of your application as the `candle` script and provides a number of helpful commands designed to aid you in the development process of your application. To view a list of all available Candle commands, you may use the `help` command:
 
 ```php
 php candle help
