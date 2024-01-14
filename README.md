@@ -12,7 +12,7 @@ Elemental is a PHP framework developed from scratch for dynamic, user-friendly c
 - [Route Model Binding](#route-model-binding)
 - [Inbuilt Object Relational Mapper (ORM)](#object-relational-mapper-model)
 - [Command Line Engine - Candle](#candle-command-line-engine)
-- [View Composing with Component and Layouts](#views)
+- [View Composition with Components and Layouts](#views)
 - [Middlewares](#middleware)
 - [Custom Exception Handling](#exception-handler)
 - [MVC Architecture](#controllers)
@@ -23,10 +23,11 @@ Elemental is a PHP framework developed from scratch for dynamic, user-friendly c
 
 ## Demo - Inkwell
 
-To showcase the capabilities of Elemental, a fully working platform called **Inkwell** has been developed using Elemental. Inkwell is a unique space dedicated to the pure essence of storytelling. In line with Elemental's goal of having no external dependencies, Inkwell has been crafted using plain HTML, CSS, JS, and PHP only.
+To showcase the capabilities of Elemental, a fully working platform called **[Inkwell](https://inkwell.anees.dev)** has been developed using Elemental. Inkwell is a unique space dedicated to the pure essence of storytelling. In line with Elemental's goal of having no external dependencies, Inkwell has been crafted using plain HTML, CSS, JS, and PHP only.
 
 **Explore the demo: [Inkwell](https://inkwell.anees.dev)**
- **GitHub Repository: [Inkwell GitHub](https://github.com/AneesMuzzafer/Inkwell)**
+
+**GitHub Repository: [Inkwell GitHub](https://github.com/AneesMuzzafer/Inkwell)**
 
 Feel free to delve into both the live platform and the corresponding codebase. Explore Inkwell's features to understand how Elemental can be harnessed for your own projects.
 
