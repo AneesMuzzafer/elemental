@@ -86,6 +86,136 @@ We've taken care of the basic setup so you can focus on the magic.
 
 > **Let the enchantment begin!**
 
+
+## Dependency Injection Container:
+
+The most important feature of the Elemental is it's Dependency Injection Container which it uses for managing class dependencies and performing dependency injection.
+
+Dependency Injection is a design pattern in software development that deals with how components get hold of their dependencies. In a traditional system, a class is responsible for creating its own dependencies. With DI, the responsibility of creating and providing dependencies is moved outside the class. Instead of a class creating its dependencies, they are "injected" into the class from an external source.
+
+DI helps in achieving loosely coupled and more maintainable code. It promotes the separation of concerns by allowing each class to focus on its specific functionality without worrying about how to create or obtain its dependencies.
+
+Dependency Injection is a specific implementation of the broader concept known as Inversion of Control (IoC). IoC represents a design paradigm where the control flow of a program is inverted or handed over to an external entity, container or framework.
+
+### Automatic Dependency Resolution
+
+In Elemental, when you're using dependency injection (DI), if a class doesn't rely on any other classes or only relies on concrete classes (not abstract interfaces), you don't need to explicitly tell the DI container how to create an instance of that class. The DI container will automatically figure it out.
+
+The container will attempt to create an instance of the class, and if that class has dependencies on other classes, the container will recursively try to resolve those dependencies as well. This process continues until all the necessary classes are successfully resolved. So, you don't have to manually specify how to create each class – the DI container takes care of it for you.
+
+```php
+<?php
+
+class MailService {
+    public function __construct(private MailerAgent $mailer) {
+    }
+}
+
+// Inside some other class
+
+class UserController {
+    public function sendMail(MailService $mailService)
+    {
+        $mailService->sendMail();
+    }
+}
+
+```
+Here, by type-hinting the `MailService` inside the method argument, Elemental was able to resolve the class and create an instance of this class and pass it to the `sendMail` so that you can use it without worrying about what dependencies are required by the `MailService` class. As you can see, the `MailService` itself depends upon some other class `MailerAgent` , however, Elemental took care of resolving the `MailerAgent` class behind the scenes, passed that to the `MailService` while creating it's instance and provided that instance for your use.
+
+"So, where will this sort of injecting dependencies just by type-hinting the class name work in Elemental?"
+All the class `constructor` functions, all the `controller methods`, and the `handle` method of the command creation class.
+
+### Binding
+
+Behind the scenes, Elemental resolves a class or interface into a concrete instance by looking at any bindings that have been registered. In other words, in order to explicitly tell the framework as to how to resolve the instance of a particular class or interface, you would need to register a binding of that class or interface using the `bind` method on the `Application` instance, passing the class or interface name that we wish to register along with a closure that returns an instance of the class:
+
+```php
+app()->bind(MailService::class, function () {
+    // Run some logic, for example, decide on the mail agent to be passed to its constructor depending on some factors.
+    return new MailService(app()->make(MailAgent::class));
+});
+
+```
+
+> Note that you will typically need to bind a class only when you need
+> to run some additional logic for resolving a class, or you need to
+> bind an interface to a concrete implementation. Otherwise, Elemental
+> will resolve the class without explicitly requiring you to bind it.
+
+#### Binding a Singleton
+
+The `singleton` method binds a class or interface with the container, ensuring that it is resolved only once. After the initial resolution, any subsequent calls to the container for the same binding will return the same object instance.
+
+```php
+app()->singleton(DatabaseConnection::class, function () {
+    return new DatabaseConnection('localhost', 'username', 'password');
+});
+
+// Later in the code
+$databaseConnection1 = app()->make(DatabaseConnection::class);
+$databaseConnection2 = app()->make(DatabaseConnection::class);
+
+// $databaseConnection1 and $databaseConnection2 will reference the same instance
+
+```
+
+### App Service Provider
+
+While it's perfectly fine to register a binding anywhere in the app, it's often required to bind it while the application is bootstrapping, so that other components of the app can start using it. Elemental provides a special place to register all the bindings of the app and perform any other bootstrapping logic required by your application. This is `App\Bootstrap\AppServiceProvider`. The App Service Provider contain a `register` and a `boot` method.
+
+#### Register Method
+Within the `register` method, you should bind things into the Dependency Injection Container. However, you should not try to resolve any binding. routes, or run any other piece of functionality within the `register` method. Otherwise, you may accidentally use a service inside a container which has not loaded yet.
+
+#### Boot Method
+This method is called after all other service providers have been registered, granting access to all services registered by the framework. Any initialization logic you wish to execute should be placed here.
+
+```php
+<?php
+
+namespace App\Bootstrap;
+
+use App\Services\Auth;
+
+class AppServiceProvider
+{
+    public function register(): void
+    {
+        app()->singleton(Auth::class, function () {
+            return new Auth();
+        });
+    }
+
+    public function boot(): void
+    {
+        // Additional initialization logic can be placed here
+    }
+}
+
+```
+### Resolving a class
+
+You may use the `make` method to resolve a class instance from the DI container. The `make` method on the application instance accepts the name of the class or interface you wish to resolve:
+
+```php
+use App\Services\MailService;
+
+$mailService=  app()->make(MailService::class);
+```
+You may also get the application instance using the static method `instance` directly on the `Application` class.
+
+```php
+use Core\Main\Application;
+use App\Services\MailService;
+
+$mailService =  Application::instance()->make(MailService::class);
+```
+
+The `make` method is particularly useful when attempting to resolve a class from within a code component where it's impractical to inject a dependency using type-hinting. In such scenarios, you can explicitly request the application's Dependency Injection Container to resolve an instance for you.
+
+
+
+
 ## Routing:
 
 Routes are defined in the `app\routes.php` file, allowing developers to easily register various routes to handle different HTTP requests.
@@ -1449,132 +1579,6 @@ The `redirect` function returns a redirect HTTP response and is used to redirect
 ```php
 return  redirect('/home');
 ```
-
-## Dependency Injection Container:
-
-The most important feature of the Elemental is it's Dependency Injection Container which it uses for managing class dependencies and performing dependency injection.
-
-Dependency Injection is a design pattern in software development that deals with how components get hold of their dependencies. In a traditional system, a class is responsible for creating its own dependencies. With DI, the responsibility of creating and providing dependencies is moved outside the class. Instead of a class creating its dependencies, they are "injected" into the class from an external source.
-
-DI helps in achieving loosely coupled and more maintainable code. It promotes the separation of concerns by allowing each class to focus on its specific functionality without worrying about how to create or obtain its dependencies.
-
-Dependency Injection is a specific implementation of the broader concept known as Inversion of Control (IoC). IoC represents a design paradigm where the control flow of a program is inverted or handed over to an external entity, container or framework.
-
-### Automatic Dependency Resolution
-
-In Elemental, when you're using dependency injection (DI), if a class doesn't rely on any other classes or only relies on concrete classes (not abstract interfaces), you don't need to explicitly tell the DI container how to create an instance of that class. The DI container will automatically figure it out.
-
-The container will attempt to create an instance of the class, and if that class has dependencies on other classes, the container will recursively try to resolve those dependencies as well. This process continues until all the necessary classes are successfully resolved. So, you don't have to manually specify how to create each class – the DI container takes care of it for you.
-
-```php
-<?php
-
-class MailService {
-    public function __construct(private MailerAgent $mailer) {
-    }
-}
-
-// Inside some other class
-
-class UserController {
-    public function sendMail(MailService $mailService)
-    {
-        $mailService->sendMail();
-    }
-}
-
-```
-Here, by type-hinting the `MailService` inside the method argument, Elemental was able to resolve the class and create an instance of this class and pass it to the `sendMail` so that you can use it without worrying about what dependencies are required by the `MailService` class. As you can see, the `MailService` itself depends upon some other class `MailerAgent` , however, Elemental took care of resolving the `MailerAgent` class behind the scenes, passed that to the `MailService` while creating it's instance and provided that instance for your use.
-
-"So, where will this sort of injecting dependencies just by type-hinting the class name work in Elemental?"
-All the class `constructor` functions, all the `controller methods`, and the `handle` method of the command creation class.
-
-### Binding
-
-Behind the scenes, Elemental resolves a class or interface into a concrete instance by looking at any bindings that have been registered. In other words, in order to explicitly tell the framework as to how to resolve the instance of a particular class or interface, you would need to register a binding of that class or interface using the `bind` method on the `Application` instance, passing the class or interface name that we wish to register along with a closure that returns an instance of the class:
-
-```php
-app()->bind(MailService::class, function () {
-    // Run some logic, for example, decide on the mail agent to be passed to its constructor depending on some factors.
-    return new MailService(app()->make(MailAgent::class));
-});
-
-```
-
-> Note that you will typically need to bind a class only when you need
-> to run some additional logic for resolving a class, or you need to
-> bind an interface to a concrete implementation. Otherwise, Elemental
-> will resolve the class without explicitly requiring you to bind it.
-
-#### Binding a Singleton
-
-The `singleton` method binds a class or interface with the container, ensuring that it is resolved only once. After the initial resolution, any subsequent calls to the container for the same binding will return the same object instance.
-
-```php
-app()->singleton(DatabaseConnection::class, function () {
-    return new DatabaseConnection('localhost', 'username', 'password');
-});
-
-// Later in the code
-$databaseConnection1 = app()->make(DatabaseConnection::class);
-$databaseConnection2 = app()->make(DatabaseConnection::class);
-
-// $databaseConnection1 and $databaseConnection2 will reference the same instance
-
-```
-
-### App Service Provider
-
-While it's perfectly fine to register a binding anywhere in the app, it's often required to bind it while the application is bootstrapping, so that other components of the app can start using it. Elemental provides a special place to register all the bindings of the app and perform any other bootstrapping logic required by your application. This is `App\Bootstrap\AppServiceProvider`. The App Service Provider contain a `register` and a `boot` method.
-
-#### Register Method
-Within the `register` method, you should bind things into the Dependency Injection Container. However, you should not try to resolve any binding. routes, or run any other piece of functionality within the `register` method. Otherwise, you may accidentally use a service inside a container which has not loaded yet.
-
-#### Boot Method
-This method is called after all other service providers have been registered, granting access to all services registered by the framework. Any initialization logic you wish to execute should be placed here.
-
-```php
-<?php
-
-namespace App\Bootstrap;
-
-use App\Services\Auth;
-
-class AppServiceProvider
-{
-    public function register(): void
-    {
-        app()->singleton(Auth::class, function () {
-            return new Auth();
-        });
-    }
-
-    public function boot(): void
-    {
-        // Additional initialization logic can be placed here
-    }
-}
-
-```
-### Resolving a class
-
-You may use the `make` method to resolve a class instance from the DI container. The `make` method on the application instance accepts the name of the class or interface you wish to resolve:
-
-```php
-use App\Services\MailService;
-
-$mailService=  app()->make(MailService::class);
-```
-You may also get the application instance using the static method `instance` directly on the `Application` class.
-
-```php
-use Core\Main\Application;
-use App\Services\MailService;
-
-$mailService =  Application::instance()->make(MailService::class);
-```
-
-The `make` method is particularly useful when attempting to resolve a class from within a code component where it's impractical to inject a dependency using type-hinting. In such scenarios, you can explicitly request the application's Dependency Injection Container to resolve an instance for you.
 
 
 
