@@ -40,7 +40,7 @@ class ExceptionHandler
         return $response;
     }
 
-    public function handle(Exception $e)
+    public function handle($e)
     {
         return null;
     }

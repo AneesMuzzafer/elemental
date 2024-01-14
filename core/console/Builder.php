@@ -145,12 +145,7 @@ class $this->name extends Command {
 
     protected \$key = \"command_name\";
 
-    public function __construct(private Commander \$commander)
-    {
-        parent::__construct();
-    }
-
-    public function handle()
+    public function handle(Commander \$commander)
     {
          //handle command here!
     }
