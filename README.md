@@ -25,12 +25,12 @@ Elemental is a PHP framework developed from scratch for dynamic, user-friendly c
 
 To showcase the capabilities of Elemental, a fully working platform called **[Inkwell](https://inkwell.anees.dev)** has been developed using Elemental. Inkwell is a unique space dedicated to the pure essence of storytelling. In line with Elemental's goal of having no external dependencies, Inkwell has been crafted using plain HTML, CSS, JS, and PHP only.
 
-**Explore the demo: [Inkwell](https://inkwell.anees.dev)**
-
-**GitHub Repository: [Inkwell GitHub](https://github.com/AneesMuzzafer/Inkwell)**
+- **Explore the demo: [Inkwell](https://inkwell.anees.dev)**
+- **GitHub Repository: [Inkwell GitHub](https://github.com/AneesMuzzafer/Inkwell)**
 
 Feel free to delve into both the live platform and the corresponding codebase. Explore Inkwell's features to understand how Elemental can be harnessed for your own projects.
 
+See the [inspiration](#inspiration) behind the creation of **Elemental**.
 
 ## Documentation:
 
@@ -49,10 +49,9 @@ Feel free to delve into both the live platform and the corresponding codebase. E
  13. [Exception Handler](#exception-handler)
  14. [Configuration](#configuration)
  15. [Facades](#facades)
- 16. [Inspiration](#inspiration)
 
 
-## Getting Started:
+## Getting Started
 
 ### Why Choose Elemental?
 
@@ -99,7 +98,7 @@ We've taken care of the basic setup so you can focus on the magic.
 > **Let the enchantment begin!**
 
 
-## Dependency Injection Container:
+## Dependency Injection Container
 
 The most important feature of the Elemental is it's Dependency Injection Container which it uses for managing class dependencies and performing dependency injection.
 
@@ -228,7 +227,7 @@ The `make` method is particularly useful when attempting to resolve a class from
 
 
 
-## Routing:
+## Routing
 
 Routes are defined in the `app\routes.php` file, allowing developers to easily register various routes to handle different HTTP requests.
 
@@ -359,7 +358,7 @@ The `route:list` Candle command will provide the list of all the routes defined 
 php candle route:list
 ```
 
-## Controllers:
+## Controllers
 
 
 Rather than consolidating all request handling logic within closures in your route files, consider structuring this behavior through "controller" classes. Controllers allow you to organize related request handling logic into a cohesive class. For instance, a `UserController` class could manage various incoming requests related to users, such as displaying, creating, updating, and deleting users. These controller classes are conventionally stored in the `app/Controllers` directory.
@@ -483,7 +482,7 @@ class StoryController
 }
 ```
 
-## Request:
+## Request
 
 The `Core\Request\Request` class in Elemental offers an object-oriented approach for engaging with the present HTTP request managed by your application. It facilitates the retrieval of input, cookies, and files submitted along with the request.
 
@@ -652,7 +651,7 @@ You may retrieve the XML content of the request using the `xml` method provided 
 $xmlData = $request->xml();
 ```
 
-## Responses:
+## Responses
 
 Every route and controller is expected to produce a response for delivery to the user's browser. Elemental offers various methods for generating responses. The simplest form of response involves returning a string directly from a route or controller. The framework will seamlessly convert this string into a complete HTTP response.
 ```php
@@ -765,7 +764,7 @@ Route::post('/post', function  () {
 ```
 
 
-## Middleware:
+## Middleware
 
 
 Middleware offers a convenient mechanism to examine and filter incoming HTTP requests to your application. For instance, you can develop middleware to validate the authentication status of your application's user. If the user is not authenticated, the middleware will redirect them to the login screen. Conversely, if the user is authenticated, the middleware will permit the request to advance deeper into the application.
@@ -876,7 +875,7 @@ Route::group(["middleware" => [HasSession::class]], function () {
 ```
 
 
-## Views, Layouts, and Components:
+## Views, Layouts, and Components
 
 ### Views
 
@@ -978,7 +977,7 @@ This component can be used inside any other view file. For example, in `views/Lo
 
 Thus, Elemental empowers you with both layout and component constructs, allowing you to compose your views with the finesse of both top-down and bottom-up approaches. This flexibility enables a seamless fusion, where you can effortlessly mix and combine elements to craft an elegant and sophisticated user interface for your application.
 
-## Database:
+## Database
 
 In the modern web applications, database interaction is a fundamental aspect. Elemental has been designed to streamline this interaction seamlessly across a diverse range of supported databases, leveraging the inherent capabilities of PHP PDO. With Elemental, you have the flexibility to execute any complex query or transaction using the `Core\Database\Database` class.
 
@@ -1299,7 +1298,7 @@ $user_data = $user->data();
 ```
 
 
-## Candle (Command Line Engine):
+## Candle (Command Line Engine)
 
 Candle is the command line engine of the Elemental. Candle exists at the root of your application as the `candle` script and provides a number of helpful commands designed to aid you in the development process of your application. To view a list of all available Artisan commands, you may use the `help` command:
 
@@ -1526,7 +1525,7 @@ As you can see, generating commands are very powerful and can be helpful to achi
 Commands can also be used for handling task scheduling. You may create a command that executes some logic, and then pass the command to your operating systems CRON handler.
 
 
-## Helpers:
+## Helpers
 
 Elemental includes a variety of global "helper" PHP functions. You  can use these functions in any way that is convenient to you.
 
@@ -1594,7 +1593,7 @@ return  redirect('/home');
 
 
 
-## Exception Handler:
+## Exception Handler
 
 
 Elemental provides a convenient way to handle all the exceptions thrown by the app.
@@ -1659,7 +1658,7 @@ You are free to create your own exception classes by extending from the base `Ex
 
 Feel free to customize the `handle` method based on your application's specific needs.
 
-## Configuration:
+## Configuration
 
 All configuration settings for the application are centralized in the `app\config\config.php` file. These configurations cover various aspects such as database connection information and other core settings essential for your app.
 
@@ -1699,7 +1698,7 @@ This approach keeps your configuration centralized and allows for easy changes b
 
 
 
-## Facades:
+## Facades
 
 Elemental introduces a Facade system inspired by Laravel, providing a convenient and expressive static interface to classes within the application's Dependency Injection (DI) container. Facades act as static proxies to classes in the service container, offering a balance between a concise syntax and the testability and flexibility of traditional static methods.
 
@@ -1743,18 +1742,18 @@ class PaymentGatewayFacade extends Facade
 
 Now, you can access the instance methods of your custom class by calling static methods on the corresponding `FacadeClass`.
 
-## Inspiration:
+## Inspiration
 
 [LARAVEL](https://laravel.com/) is ***Magic***. Like any unsuspecting Muggle, it's enchantments terrify you. Until one fine day, you dare to pick up the wand and start waving it. Then, you fall in ***love*** with it.
 
-## License:
+## License
 
 The Elemental framework is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-## Contributing:
+## Contributing
 
 All contributions are welcome. Please create an issue first for any feature request or bug. Then fork the repository, create a branch and make any changes to fix the bug or add the feature and create a pull request. That's it! Thanks!
 
-## Support:
+## Support
 
 For bug reports, feature requests, or general questions, please use the [issue tracker](https://github.com/aneesmuzzafer/elemental/issues).
