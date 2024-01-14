@@ -8,36 +8,38 @@ Elemental is a lightweight PHP MVC framework developed from scratch, designed fo
 
 ## Features:
 
-- [Powerful Dependency Injection Container ](#dependency-injection-ioc-containers)
-- [Fast Routing Engine](#fast-routing-engine)
+- [Powerful Dependency Injection Container ](#dependency-injection-container)
+- [Fast Routing Engine](#routing)
 - [Route Model Binding](#route-model-binding)
-- [Inbuilt Object Relational Mapper (ORM)](#inbuilt-orm)
-- [Command Line Engine - Candle](#command-line-control-candle)
-- [View Composing with Component and Layouts](#view-composer)
-- [Middlewares](#view-composer)
+- [Inbuilt Object Relational Mapper (ORM)](#object-relational-mapper-model)
+- [Command Line Engine - Candle](#candle-command-line-engine)
+- [View Composing with Component and Layouts](#views)
+- [Middlewares](#middleware)
 - [Custom Exception Handling](#exception-handler)
-- [MVC Architecture](#exception-handler)
-- [Facades](#facade)
-- [No External Dependency](#no-external-dependency)
+- [MVC Architecture](#controllers)
+- [Facades](#facades)
+- [No External Dependency](#why-choose-elemental)
 
 
 ## Documentation:
 
-1. [Getting Started](#getting-started)
-2. [Routing](#routing)
-3. [Controllers](#controllers)
-4. [Request](#request)
-5. [Responses](#responses)
-6. [Middleware](#middleware)
-7. [Views, Layouts and Components](#views)
-8. [Database](#views)
-9. [Candle](#views)
-10. [Helpers](#views)
-11. [Exception Handler](#views)
-12. [Configuration](#views)
-13. [Dependency Injection Container](#views)
-14. [Facades](#views)
-15. [Inpiration](#views)
+ 1. [Getting Started](#getting-started)
+ 2. [Dependency Injection Container](#dependency-injection-container)
+ 3. [Routing](#routing)
+ 4. [Controllers](#controllers)
+ 5. [Request](#request)
+ 6. [Responses](#responses)
+ 7. [Middleware](#middleware)
+ 8. [Views, Layouts and Components](#views)
+ 9. [Database](#database)
+ 10. [Models (ORM)](#object-relational-mapper-model)
+ 11. [Candle](#candle-command-line-engine)
+ 12. [Helpers](#helpers)
+ 13. [Exception Handler](#exception-handler)
+ 14. [Configuration](#configuration)
+ 15. [Facades](#facades)
+ 16. [Inspiration](#inspiration)
+
 
 ## Getting Started:
 
