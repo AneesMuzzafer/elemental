@@ -32,7 +32,7 @@ Feel free to delve into both the live platform and the corresponding codebase. E
 See the [inspiration](#inspiration) behind the creation of **Elemental**.
 
 
-### Why Choose Elemental?
+## Why Choose Elemental?
 
 Elemental has been designed with the aim of having no strings attached. There are no dependencies on external libraries or frameworks. The aim is to give the developers a genuine sense of control—an invitation to independently explore and understand the magical stuff that powers the framework.
 
