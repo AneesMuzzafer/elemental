@@ -2,8 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Elemental is a PHP framework developed from scratch for dynamic, user-friendly coding experiences. It incorporates various features  such as Dependency Injection  and follows the MVC architecture to streamline web development and improve code organization. Engineered with a passion for simplicity and flexibility, Elemental opens the doors to a realm where coding meets unparalleled control.
-
+Elemental is a PHP framework developed from scratch for dynamic, user-friendly coding experiences. It incorporates features such as Dependency Injection and follows the MVC architecture to streamline web development and improve code organization. Engineered with a passion for simplicity and flexibility, it invites developers into a realm where they can wield unparalleled control and gain a profound understanding of the tools at their disposal.
 
 ## Features:
 
@@ -32,6 +31,15 @@ Feel free to delve into both the live platform and the corresponding codebase. E
 
 See the [inspiration](#inspiration) behind the creation of **Elemental**.
 
+
+### Why Choose Elemental?
+
+Elemental has been designed with the aim of having no strings attached. There are no dependencies on external libraries or frameworks. The aim is to give the developers a genuine sense of control—an invitation to independently explore and understand the magical stuff that powers the framework.
+
+The overarching goal? Let developers fully embrace and leverage the elegance of powerful abstractions like DI containers, ORMs, Middlewares, and more. But here's the kicker—Elemental is not just pointing the way. It is handing you the keys to unravel the mysteries, empowering you to explore how these abstractions are laid out in the code.
+
+In fact, you are encouraged not just to follow the path but to venture off the beaten track. Dive into the codebase, dissect the abstractions, and understand their inner workings. Feel free to tweak and experiment, for Elemental is not just a framework—it's an open invitation to shape and mold the tools at your disposal. Because coding shouldn't be a maze; it should be a journey. Let's make that journey together. 🚀
+
 ## Documentation:
 
  1. [Getting Started](#getting-started)
@@ -52,12 +60,6 @@ See the [inspiration](#inspiration) behind the creation of **Elemental**.
 
 
 ## Getting Started
-
-### Why Choose Elemental?
-
-Elemental has been designed with the aim of having no strings attached. There are no dependencies on external libraries or frameworks. The aim is to give the developers a genuine sense of control—an invitation to independently explore and understand the magical stuff that powers the framework.
-
-The goal? Let developers fully embrace and leverage the elegance of powerful abstractions like DI containers, ORMs, Middlewares, and more. But here's the kicker—Elemental is not just pointing the way. It is handing you the keys to unravel the mysteries, empowering you to explore how these abstractions are laid out in the code. Because coding shouldn't be a maze; it should be a journey. Let's make that journey together. 🚀
 
 ### Creating Your First Elemental App
 
@@ -81,7 +83,7 @@ For those who prefer the Composer route, creating a new Elemental app is just a 
 composer create-project elemental/elemental sample-app
 ```
 
-This will generate a project complete with a `composer.json` file.
+This will generate a project with a `composer.json` file.
 
 Once your project is ready, kickstart the Elemental local development server with the `ignite` command using our command line engine, *Candle*:
 
