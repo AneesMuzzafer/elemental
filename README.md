@@ -80,7 +80,7 @@ No worries about package managers or dependencies – Elemental is built from sc
 For those who prefer the Composer route, creating a new Elemental app is just a command away:
 
 ```bash
-composer create-project elemental/elemental sample-app
+composer create-project fragment/elemental sample-app
 ```
 
 This will generate a project with a `composer.json` file.
