@@ -46,7 +46,6 @@ class WebEngine implements WebEngineContract
         return $this->app->resolveMethod($action, $resolvedArgs);
     }
 
-
     public function prepareResponse($response)
     {
         $response = (new ResponseGenerator($response))->toResponse();

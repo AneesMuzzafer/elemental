@@ -28,10 +28,10 @@ class Route
         $uri = $this->uri;
 
         if ($uri == "/") {
-
             $this->routeSegments = [
                 ["key" => "/", "is_param" => false, "binding" => ""],
             ];
+
             return;
         }
 
@@ -42,17 +42,16 @@ class Route
         $segments = explode('/', $uri);
 
         $this->routeSegments = array_map(function ($segment) {
-
             if ($segment === "") return false;
 
             $routeProp = [];
             if ($segment[0] === "{" && $segment[strlen($segment) - 1] === "}") {
-
                 $segment = substr(substr($segment, 0, -1), 1);
                 $parts = explode(":", $segment);
 
                 $routeProp["key"] = $parts[0];
                 $routeProp["is_param"] = true;
+
                 if (count($parts) === 2) {
                     $routeProp["binding"] = $parts[1];
                 } else {
@@ -76,18 +75,21 @@ class Route
     public function middleware(array $middleware): static
     {
         $this->middleware = array_merge($this->middleware, $middleware);
+
         return $this;
     }
 
     public function name(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function prefix(string $prefix): static
     {
         $this->prefix = $prefix;
+
         return $this;
     }
 }

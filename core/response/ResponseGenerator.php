@@ -9,6 +9,7 @@ class ResponseGenerator
 {
     public function __construct(private $content)
     {
+        //
     }
 
     public function toResponse(): Response

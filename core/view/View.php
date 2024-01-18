@@ -7,7 +7,6 @@ use Core\Main\Application;
 
 class View
 {
-
     private string $path;
     private string $name;
 
@@ -16,7 +15,6 @@ class View
 
     private string $content = "";
     private string $layoutContent = "";
-
 
     private array $params;
 
@@ -39,7 +37,6 @@ class View
         ob_start();
 
         $includeFile = function () {
-
             extract(func_get_arg(0));
 
             include func_get_arg(1);
@@ -56,7 +53,6 @@ class View
         ob_start();
 
         $includeFile = function () {
-
             include func_get_arg(0);
         };
 
@@ -74,6 +70,7 @@ class View
         if (!file_exists($path)) {
             throw new ViewNotFoundException("Could not find " . $viewName . ".php");
         }
+
         return $path;
     }
 
@@ -81,16 +78,18 @@ class View
     {
         $segments = explode(".", $viewName);
         $path = implode("/", $segments);
+
         return $path;
     }
 
     public function view()
     {
         if (isset($this->layoutPath)) {
-
             $this->parseLayoutContent();
         }
+
         $this->compileContent();
+
         return $this->content;
     }
 
@@ -98,13 +97,14 @@ class View
     {
         $this->layoutName = $layoutName;
         $layoutName = static::getCurrentPath($layoutName);
-
         $layoutPath = Application::getInstance()->basePath() . "/app/views/" . $layoutName . ".php";
 
         if (!file_exists($layoutPath)) {
             throw new ViewNotFoundException("Could not find " . $this->layoutName . ".php");
         }
+
         $this->layoutPath = $layoutPath;
+
         return $this;
     }
 

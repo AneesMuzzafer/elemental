@@ -7,7 +7,6 @@ use Core\Main\Application;
 
 class Pipeline
 {
-
     private array $pipeline;
     private int $index = 0;
 
@@ -18,17 +17,20 @@ class Pipeline
 
     public function __construct()
     {
+        //
     }
 
     public function pass($passingObject)
     {
         $this->passingObject = $passingObject;
+
         return $this;
     }
 
     public function makePipeline($pipes)
     {
         $this->pipeline = is_array($pipes) ? $pipes : func_get_args();
+
         return $this;
     }
 

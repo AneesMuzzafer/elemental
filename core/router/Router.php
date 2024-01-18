@@ -28,6 +28,7 @@ class Router
 
     public function __construct()
     {
+        //
     }
 
     public function addRoute(string $method, Route $route)
@@ -50,17 +51,14 @@ class Router
 
     public function registerRoutes()
     {
-        $path = Application::getInstance()->basePath() . "/app/routes.php";
-        require_once $path;
+        require_once Application::getInstance()->basePath() . "/app/routes.php";
     }
 
     public function resolveController(Route $route, array $args)
     {
         if (is_callable($route->action)) {
-
             $action = $route->action;
         } else if (is_array($route->action)) {
-
             [$controller, $method] = $route->action;
 
             $controllerInstance = Application::getInstance()->make($controller);
@@ -89,7 +87,6 @@ class Router
         if ($path == "/") {
             $segments = ["/"];
         } else {
-
             if ($path[0] == "/") {
                 $path = substr($path, 1);
             }
@@ -98,9 +95,7 @@ class Router
         }
 
         foreach ($this->routes[$method] as $route) {
-
             if (count($route->routeSegments) !== count($segments)) continue;
-
 
             $flag = true;
             $args = [];
@@ -116,8 +111,9 @@ class Router
 
                 if ($uriSegment["key"] != $pathSegment) {
                     $flag = false;
-                };
+                }
             }
+
             if ($flag) {
                 return [$route, $args];
             }
@@ -149,6 +145,7 @@ class Router
     {
         $route = new Route($method, $uri, $action);
         $this->addRoute($method, $route);
+
         return $route;
     }
 
@@ -184,9 +181,9 @@ class Router
 
     public function fallback(array | callable $action)
     {
-        $fallback = new Route("FALLBACK", "*", $action);
-        $this->fallback = $fallback;
-        return $fallback;
+        $this->fallback = new Route("FALLBACK", "*", $action);
+
+        return $this->fallback;
     }
 
     public function group(array $attributes, callable $callback)

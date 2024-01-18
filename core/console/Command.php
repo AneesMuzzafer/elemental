@@ -6,7 +6,6 @@ use Core\Main\Application;
 
 class Command
 {
-
     protected $key;
     protected $description;
 
@@ -20,14 +19,16 @@ class Command
         }
     }
 
-    public function getKey(){
-        if(!isset($this->key)) return null;
+    public function getKey()
+    {
+        if (!isset($this->key)) return null;
 
         return $this->key;
     }
 
-    public function getDescription() {
-        if(!isset($this->description)) return null;
+    public function getDescription()
+    {
+        if (!isset($this->description)) return null;
 
         return $this->description;
     }

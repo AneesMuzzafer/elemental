@@ -133,6 +133,7 @@ class Request
 
     public function readRawContent()
     {
+        //
     }
 
     public function parseBody()
