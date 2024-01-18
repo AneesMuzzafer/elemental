@@ -28,10 +28,10 @@ class Route
         $uri = $this->uri;
 
         if ($uri == "/") {
-
             $this->routeSegments = [
                 ["key" => "/", "is_param" => false, "binding" => ""],
             ];
+
             return;
         }
 
@@ -46,12 +46,12 @@ class Route
 
             $routeProp = [];
             if ($segment[0] === "{" && $segment[strlen($segment) - 1] === "}") {
-
                 $segment = substr(substr($segment, 0, -1), 1);
                 $parts = explode(":", $segment);
 
                 $routeProp["key"] = $parts[0];
                 $routeProp["is_param"] = true;
+
                 if (count($parts) === 2) {
                     $routeProp["binding"] = $parts[1];
                 } else {
