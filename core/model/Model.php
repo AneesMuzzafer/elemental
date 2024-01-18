@@ -114,7 +114,7 @@ class Model
         $model = static::find($id);
 
         if (is_null($model)) {
-            throw new ModelNotFoundException("No model could be found with the given 'id'.");
+            throw new ModelNotFoundException("No model found with the given 'id'.");
         }
 
         foreach ($data as $key => $value) {

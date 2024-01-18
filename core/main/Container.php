@@ -187,7 +187,7 @@ class Container
                     }
 
                     if (is_null($foundModel)) {
-                        throw new ModelNotFoundException("No model could be found with the given parameters");
+                        throw new ModelNotFoundException("No model found with the given parameters.");
                     }
 
                     return $foundModel;
