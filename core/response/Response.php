@@ -7,7 +7,6 @@ use Core\Request\Request;
 
 class Response
 {
-
     protected Request $request;
 
     private string $statusCode = "200";
@@ -71,6 +70,7 @@ class Response
         }
 
         header("HTTP/1.1 " . $this->statusCode . " " . self::STATUS_TEXT[$this->statusCode]);
+
         foreach ($this->headers as $name => $value) {
             header($name . ": " . $value);
         }

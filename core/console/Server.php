@@ -29,6 +29,7 @@ class Server
     private function getAvailablePort(): int
     {
         $port = $this->port;
+
         while ($this->isPortAvailable($port) == false) {
             $port = $port + 1;
         }
@@ -57,6 +58,7 @@ class Server
         if ($parts[0] == "--host" && $this->isValidHost(trim($parts[1]))) {
             $this->host = trim($parts[1]);
         }
+
         if ($parts[0] == "--port" && $this->isValidPort(trim($parts[1]))) {
             $this->port = (int) trim($parts[1]);
         }
@@ -67,6 +69,7 @@ class Server
         if (!filter_var($host, FILTER_VALIDATE_IP)) {
             console_log("Invalid Host! $host could not be resolved to a valid IP address. Using 127.0.0.1 instead!");
         }
+
         return true;
     }
 
@@ -79,6 +82,7 @@ class Server
         if (!$this->isPortAvailable($port)) {
             console_log("Port:$port is not available. Using $this->port instead");
         }
+
         return true;
     }
 }

@@ -6,7 +6,6 @@ use Core\Main\Application;
 
 class Facade
 {
-
     public static function __callStatic($name, $args)
     {
         $facadeAccessor = static::getFacadeAccessor();

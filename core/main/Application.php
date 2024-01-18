@@ -9,9 +9,7 @@ use Core\Router\Router;
 class Application extends Container
 {
     protected static ?Application $instance = null;
-
     protected ?Router $router;
-
     private $basePath;
 
     public function __construct()
@@ -49,6 +47,7 @@ class Application extends Container
         if (is_null(self::$instance)) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 

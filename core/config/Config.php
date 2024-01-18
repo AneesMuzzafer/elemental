@@ -6,9 +6,7 @@ use Core\Main\Application;
 
 class Config
 {
-
     private array $config = [];
-
     private string $configPath;
 
     public function __construct()

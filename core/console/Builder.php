@@ -53,7 +53,7 @@ class Builder
 
     public function generateMiddleware()
     {
-        console_log("Generating Middlware named $this->name.");
+        console_log("Generating Middleware named $this->name.");
         $dir = Application::getInstance()->basePath() . "/app/middlewares";
 
         $content = $this->getMiddlewareContent();

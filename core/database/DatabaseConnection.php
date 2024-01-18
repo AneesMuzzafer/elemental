@@ -8,6 +8,7 @@ use PDO;
 class DatabaseConnection
 {
     protected PDO $pdo;
+
     public function __construct(Config $config)
     {
         $driver = $config->db["driver"];

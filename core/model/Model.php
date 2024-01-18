@@ -64,6 +64,7 @@ class Model
         }
 
         $this->setData($data);
+
         return $this;
     }
 
@@ -88,19 +89,20 @@ class Model
 
     public function getSQL()
     {
+        $sql = "";
+
         if (!isset($this->data['id'])) {
             $columns = implode(', ', array_keys($this->data));
             $values = implode(', ', array_map(fn ($val, $index) => ':' . $index, $this->data, array_keys($this->data)));
 
             $sql = "INSERT INTO $this->tableName ($columns) VALUES ($values);";
-            return $sql;
         } else {
             $setStmt = implode(', ', array_map(fn ($column) => "$column = :$column", array_keys($this->data)));
 
             $sql = "UPDATE $this->tableName SET $setStmt WHERE $this->primaryKey = :id;";
-
-            return $sql;
         }
+
+        return $sql;
     }
 
     public static function update($id, array $data)
@@ -115,7 +117,7 @@ class Model
             throw new ModelNotFoundException("No model could be found with the given 'id'.");
         }
 
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $model->data[$key] = $value;
         }
 
@@ -150,9 +152,11 @@ class Model
         $model = static::find($id);
 
         if (is_null($model)) {
-            throw new ModelNotFoundException("No model could be found with the given 'id'.");
+            throw new ModelNotFoundException("No model found with the given 'id'.");
         }
+
         $model->data[$model->primaryKey] = $id;
+
         return $model->destroy();
     }
 

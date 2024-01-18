@@ -21,9 +21,7 @@ class Container
     ];
 
     protected array $resolvedInstances = [];
-
     protected array $coreBindings = [];
-
     protected array $instances = [];
     protected array $bindings = [];
 
@@ -86,10 +84,10 @@ class Container
             return $this->resolvedInstances[$key];
         }
 
-        $intance = $this->resolve($key);
-        $this->resolvedInstances[$key] = $intance;
+        $instance = $this->resolve($key);
+        $this->resolvedInstances[$key] = $instance;
 
-        return $intance;
+        return $instance;
     }
 
     public function resolve(String $key)
@@ -172,7 +170,6 @@ class Container
             }
 
             foreach ($args as $arg) {
-
                 $modelClass = "App\Models\\" . ucfirst($arg["key"]);
 
                 if ($modelClass !== $type->getName()) {
@@ -188,9 +185,11 @@ class Container
                     } else {
                         $foundModel = $model->where([$arg["binding"] => $arg["value"]]);
                     }
+
                     if (is_null($foundModel)) {
                         throw new ModelNotFoundException("No model could be found with the given parameters");
                     }
+
                     return $foundModel;
                 }
             }

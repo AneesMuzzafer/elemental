@@ -6,13 +6,12 @@ use Core\Main\Application;
 
 class Commander
 {
-
     public $args = [];
-
     private array $commands = [];
 
     public function __construct()
     {
+        //
     }
 
     public function resolveCommand()
@@ -69,7 +68,8 @@ class Commander
         return $this;
     }
 
-    public function getArgs() {
+    public function getArgs()
+    {
         return $this->args;
     }
 

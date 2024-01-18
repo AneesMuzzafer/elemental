@@ -9,6 +9,7 @@ class ExceptionHandler
 {
     public function __construct(private Response $response)
     {
+        //
     }
 
     public function handleException($e)

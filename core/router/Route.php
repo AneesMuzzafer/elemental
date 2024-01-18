@@ -42,7 +42,6 @@ class Route
         $segments = explode('/', $uri);
 
         $this->routeSegments = array_map(function ($segment) {
-
             if ($segment === "") return false;
 
             $routeProp = [];
@@ -76,18 +75,21 @@ class Route
     public function middleware(array $middleware): static
     {
         $this->middleware = array_merge($this->middleware, $middleware);
+
         return $this;
     }
 
     public function name(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function prefix(string $prefix): static
     {
         $this->prefix = $prefix;
+
         return $this;
     }
 }

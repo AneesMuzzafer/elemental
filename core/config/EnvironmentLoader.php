@@ -14,7 +14,6 @@ class EnvironmentLoader
 
         $lines = file($path);
         foreach ($lines as $line) {
-
             $parts = explode('=', $line, 2);
             if (count($parts) != 2) continue;
 
