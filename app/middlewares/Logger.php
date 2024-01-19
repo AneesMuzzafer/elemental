@@ -12,6 +12,7 @@ class Logger
         if ($request->data()["log"] == "yes") {
             dump($request->uri());
         }
+
         return $next($request);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-class UserController {
-
+class UserController
+{
     public function index()
     {
-
+        //
     }
 }
