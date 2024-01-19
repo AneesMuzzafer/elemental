@@ -49,3 +49,22 @@ function redirect(string $url, int $code = 302)
 {
     return Response::redirect($url, $code);
 }
+
+function abort(int $code = 500, string $message = "Internal Server Error")
+{
+    throw new \Core\Exception\AppException($message, $code);
+}
+
+function abort_if(bool $condition, int $code = 500, string $message = "Internal Server Error")
+{
+    if ($condition) {
+        abort($code, $message);
+    }
+}
+
+function abort_unless(bool $condition, int $code = 500, string $message = "Internal Server Error")
+{
+    if (!$condition) {
+        abort($code, $message);
+    }
+}

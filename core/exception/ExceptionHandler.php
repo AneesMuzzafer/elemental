@@ -12,8 +12,10 @@ class ExceptionHandler
         //
     }
 
-    public function handleException($e)
+    public function handleException(\Exception $e)
     {
+        $this->response->setStatusCode($e->getCode() ?? 500);
+
         $response = $this->response->setContent($this->formatErrorMessage($e, "General Exception"));
 
         if ($e instanceof RouteNotFoundException) {
