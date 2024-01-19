@@ -66,10 +66,7 @@ class Lister
         foreach ($routeList as $r) {
             $m = $r['method'] == "GET" ? Helper::greenText($r['method']) : Helper::yellowText($r['method']);
 
-            console_log(
-                $m . "\t" . $r['uri'] .
-                    str_repeat(" ", $longestUriLength - strlen($r['uri'])) . Helper::blueText($r['action'])
-            );
+            console_log($m . "\t" . $r['uri'] . str_repeat(" ", $longestUriLength - strlen($r['uri'])) . Helper::blueText($r['action']));
         }
     }
 }
