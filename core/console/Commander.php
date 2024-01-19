@@ -17,7 +17,7 @@ class Commander
     public function resolveCommand()
     {
         if (!isset($this->args[0])) {
-            console_log("Missing the command argument. Use `php candle help` to see the list of valid commands.");
+            console_log(Helper::redText("Error: Missing the command argument. Use ") . Helper::yellowText("php candle help") . Helper::redText(" to see the list of valid commands."));
             exit(1);
         }
 
@@ -44,7 +44,7 @@ class Commander
 
         if (in_array($command, Builder::BUILD_COMMANDS)) {
             if (!isset($this->args[1])) {
-                console_log("Please specify a name for the resource you want to build.");
+                console_log(Helper::redText("Error: Please specify a name for the resource you want to build."));
                 exit(1);
             }
 
@@ -61,7 +61,7 @@ class Commander
             }
         }
 
-        console_log("Could not find any valid action for " . $command . " command.");
+        console_log(Helper::redText("Error: Could not find any valid action for command: ") . Helper::yellowText($command));
     }
 
     public function setArgs($args)

@@ -17,14 +17,14 @@ class Lister
 
     private function logRoutes()
     {
-        console_log("Registered routes");
+        console_log(Helper::purpleText("Registered routes"));
         console_log("=================\n");
 
         $routes = $this->router->getRoutes();
         $r = 0;
 
         foreach ($routes as $method => $methodRoutes) {
-            console_log("$method:\t Routes = " . count($methodRoutes));
+            console_log(Helper::yellowText("$method") . ":\t Routes = " . Helper::greenText(count($methodRoutes)));
             $i = 1;
 
             foreach ($methodRoutes as $route) {
@@ -34,6 +34,6 @@ class Lister
             }
         }
 
-        console_log("\nTotal Routes = $r");
+        console_log(Helper::greenText("\nTotal Routes = $r"));
     }
 }

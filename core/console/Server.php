@@ -19,8 +19,8 @@ class Server
             $this->parseArg($arg2);
         }
 
-        console_log("Starting server on http://$this->host:$this->port");
-        console_log("Press Ctrl+C to stop the server.");
+        console_log(Helper::purpleText("Elemental: starting server on http://$this->host:$this->port"));
+        console_log(Helper::yellowText("Press Ctrl+C to stop the server."));
 
         $command = "php -S $this->host:$this->port -t public";
         shell_exec($command);
@@ -64,23 +64,29 @@ class Server
         }
     }
 
-    private function isValidHost($host)
+    private function isValidHost($host): bool
     {
         if (!filter_var($host, FILTER_VALIDATE_IP)) {
-            console_log("Invalid Host! $host could not be resolved to a valid IP address. Using 127.0.0.1 instead!");
+            console_log(Helper::redText("Error: Invalid Host! $host could not be resolved to a valid IP address. Using 127.0.0.1 instead."));
+
+            return false;
         }
 
         return true;
     }
 
-    private function isValidPort($port)
+    private function isValidPort($port): bool
     {
         if (!($port >= 1 && $port <= 65535)) {
-            console_log("Invalid Port! $port is not a valid port. Using $this->port instead");
+            console_log(Helper::redText("Error: Invalid Port! $port is not a valid port. Using $this->port instead."));
+
+            return false;
         }
 
         if (!$this->isPortAvailable($port)) {
-            console_log("Port:$port is not available. Using $this->port instead");
+            console_log(Helper::redText("Error: Port:$port is not available. Using $this->port instead."));
+
+            return false;
         }
 
         return true;
