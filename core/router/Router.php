@@ -197,7 +197,7 @@ class Router
         $this->setAttributes($prevAttributes);
     }
 
-    public function apiResource(string $uri, $controller)
+    public function apiResource(string $uri, string $controller)
     {
         $this->get($uri, [$controller, "index"]);
         $this->post($uri, [$controller, "store"]);
