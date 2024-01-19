@@ -43,12 +43,7 @@ class Commander
         }
 
         if (in_array($command, Builder::BUILD_COMMANDS)) {
-            if (!isset($this->args[1])) {
-                console_log(Helper::redText("Error: Please specify a name for the resource you want to build."));
-                exit(1);
-            }
-
-            return new Builder($command, $this->args[1]);
+            return new Builder($command, $this->args);
         }
 
         if (array_key_exists($command, $this->commands)) {

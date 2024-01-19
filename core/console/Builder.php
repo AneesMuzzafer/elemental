@@ -6,15 +6,49 @@ use Core\Main\Application;
 
 class Builder
 {
-    private string $resource;
-    private string $name;
+    private string $name = "";
+    private bool $forceCreate = false;
+
+    private bool $isApiController = false;
+    private ?string $associatedModel = null;
 
     const BUILD_COMMANDS = ["build:model", "build:controller", "build:middleware", "build:command"];
 
-    public function __construct(string $resource, string $name)
+    public function __construct(private string $resource, private array $args)
     {
-        $this->resource = $resource;
-        $this->name = $name;
+        foreach ($args as $arg) {
+            if ($arg == $resource) continue;
+
+            if ($arg == "-f") {
+                $this->forceCreate = true;
+                continue;
+            }
+
+            if ($this->resource == self::BUILD_COMMANDS[1]) {
+                if ($arg == "--api") {
+                    $this->isApiController = true;
+                }
+
+                if (str_starts_with($arg, "--model=")) {
+                    $this->associatedModel = explode("=", $arg)[1];
+
+                    if (!file_exists(Application::getInstance()->basePath() . "/app/models/" . $this->associatedModel . ".php")) {
+                        console_log(Helper::redText("Error: The specified model (") . Helper::yellowText($this->associatedModel) . Helper::redText(") does not exist."));
+                        exit(1);
+                    }
+                }
+            }
+
+            if ($arg[0] != "-" && $this->name == "") {
+                $this->name = $arg;
+            }
+        }
+
+        if ($this->name == "") {
+            console_log(Helper::redText("Error: Please specify a name for the resource you want to build."));
+            exit(1);
+        }
+
         $this->generateResource();
     }
 
@@ -76,6 +110,11 @@ class Builder
     {
         $filePath = $dir . '/' . $filename . ".php";
 
+        if (file_exists($filePath) && !$this->forceCreate) {
+            console_log(Helper::redText("Error: The file already exists. Aborting. Use ") . Helper::yellowText("-f") . Helper::redText(" to create anyway."));
+            exit(1);
+        }
+
         $file = fopen($filePath, 'w');
 
         if ($file) {
@@ -100,12 +139,51 @@ use Core\Model\Model;
 class $this->name extends Model
 {
     //
-}";
+}
+";
     }
 
     private function getControllerContent()
     {
-        return "<?php
+        if ($this->isApiController) {
+            $modelParameter = is_null($this->associatedModel) ? "int \$id" : "$this->associatedModel $" . lcfirst($this->associatedModel);
+
+            return "<?php
+
+namespace App\Controllers;
+
+use Core\Request\Request;
+" . (!is_null($this->associatedModel) ? "use App\Models\\" . $this->associatedModel . ";\n" : "") . "
+class $this->name
+{
+    public function index()
+    {
+        //
+    }
+
+    public function store(Request \$request)
+    {
+        //
+    }
+
+    public function show($modelParameter)
+    {
+        //
+    }
+
+    public function update(Request \$request, $modelParameter)
+    {
+        //
+    }
+
+    public function destroy($modelParameter)
+    {
+        //
+    }
+}
+";
+        } else {
+            return "<?php
 
 namespace App\Controllers;
 
@@ -115,7 +193,9 @@ class $this->name
     {
         //
     }
-}";
+}
+";
+        }
     }
 
     private function getMiddlewareContent()
@@ -133,7 +213,8 @@ class $this->name
     {
         return \$next(\$request);
     }
-}";
+}
+";
     }
 
     private function getCommandContent()
@@ -153,6 +234,7 @@ class $this->name extends Command
     {
          // handle command here!
     }
-}";
+}
+";
     }
 }
