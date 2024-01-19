@@ -53,7 +53,7 @@ class Lister
                 $routeList[] = [
                     "method" => $method,
                     "uri" => $r->uri,
-                    "action" => is_array($r->action) ? $r->action[0] . "@" . $r->action[1] : "(closure)",
+                    "action" => is_array($r->action) ? basename($r->action[0]) . "@" . $r->action[1] : "(closure)",
                 ];
             }
         }
