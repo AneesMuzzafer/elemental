@@ -15,7 +15,7 @@ class Application extends Container
     public function __construct()
     {
         if (self::$instance != null) {
-            throw new \Core\Exception\AppException("App already initiated. Access the instance using App::getInstance() method");
+            throw new \Core\Exception\AppException("App already initiated. Access the instance using App::getInstance() method.");
         }
 
         $this->setBasePath();

@@ -40,6 +40,7 @@ class Pipeline
 
         $this->next = function ($request) {
             $this->index++;
+
             return $this->executeInPipeline($request, $this->thenClosure);
         };
 

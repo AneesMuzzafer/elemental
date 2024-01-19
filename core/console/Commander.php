@@ -47,6 +47,7 @@ class Commander
                 console_log("Please specify a name for the resource you want to build.");
                 exit(1);
             }
+
             return new Builder($command, $this->args[1]);
         }
 
@@ -55,6 +56,7 @@ class Commander
 
             if (method_exists($instance, "handle")) {
                 $action = [$instance, "handle"];
+
                 return app()->resolveMethod($action, []);
             }
         }
@@ -65,6 +67,7 @@ class Commander
     public function setArgs($args)
     {
         $this->args = $args;
+
         return $this;
     }
 
