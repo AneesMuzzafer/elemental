@@ -34,7 +34,7 @@ class Builder
 
     public function generateModel()
     {
-        console_log(Helper::yellowText("Generating Model named $this->name."));
+        console_log("Generating Model named " . Helper::purpleText("$this->name"));
 
         $dir = Application::getInstance()->basePath() . "/app/models";
         $content = $this->getModelContent();
@@ -44,7 +44,7 @@ class Builder
 
     public function generateController()
     {
-        console_log(Helper::yellowText("Generating Controller named $this->name."));
+        console_log("Generating Controller named " . Helper::purpleText("$this->name"));
 
         $dir = Application::getInstance()->basePath() . "/app/controllers";
         $content = $this->getControllerContent();
@@ -54,7 +54,7 @@ class Builder
 
     public function generateMiddleware()
     {
-        console_log(Helper::yellowText("Generating Middleware named $this->name."));
+        console_log("Generating Middleware named " . Helper::purpleText("$this->name"));
 
         $dir = Application::getInstance()->basePath() . "/app/middlewares";
         $content = $this->getMiddlewareContent();
@@ -64,7 +64,7 @@ class Builder
 
     public function generateCommand()
     {
-        console_log(Helper::yellowText("Generating Command named $this->name."));
+        console_log("Generating Command named " . Helper::purpleText("$this->name"));
 
         $dir = Application::getInstance()->basePath() . "/app/commands";
         $content = $this->getCommandContent();
@@ -82,7 +82,7 @@ class Builder
             fwrite($file, $content);
             fclose($file);
 
-            console_log(Helper::greenText("File '$filename.php' created successfully at $dir"));
+            console_log(Helper::greenText("File ") . Helper::purpleText("$filename.php") . Helper::greenText(" created successfully at ") . Helper::purpleText($dir));
         } else {
             console_log(Helper::redText("Error: Unable to create the file."));
             exit(1);
