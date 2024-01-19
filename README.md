@@ -46,7 +46,7 @@ In fact, you are encouraged not just to follow the path but to venture off the b
 
 #### For an exhaustive reference guide, explore the [**API Documentation**](https://aneesmuzzafer.github.io/elemental) to gain insights into Elemental's API.
 
-  ---
+ ___
 
 ### Content
 
