@@ -19,8 +19,8 @@ class Server
             $this->parseArg($arg2);
         }
 
-        console_log("Starting server on http://$this->host:$this->port");
-        console_log("Press Ctrl+C to stop the server.");
+        console_log(Helper::purpleText("Elemental: starting server on http://$this->host:$this->port"));
+        console_log(Helper::yellowText("Press Ctrl+C to stop the server."));
 
         $command = "php -S $this->host:$this->port -t public";
         shell_exec($command);
