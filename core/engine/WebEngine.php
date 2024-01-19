@@ -43,12 +43,12 @@ class WebEngine implements WebEngineContract
     public function process($route, $args)
     {
         [$action, $resolvedArgs] = $this->router->resolveController($route, $args);
+
         return $this->app->resolveMethod($action, $resolvedArgs);
     }
 
     public function prepareResponse($response)
     {
-        $response = (new ResponseGenerator($response))->toResponse();
-        return $response;
+        return (new ResponseGenerator($response))->toResponse();
     }
 }

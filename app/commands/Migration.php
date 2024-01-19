@@ -12,6 +12,6 @@ class Migration extends Command
 
     public function handle()
     {
-        //handle command here!
+        // handle command here!
     }
 }

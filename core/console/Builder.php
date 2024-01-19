@@ -35,6 +35,7 @@ class Builder
     public function generateModel()
     {
         console_log("Generating Model named $this->name.");
+
         $dir = Application::getInstance()->basePath() . "/app/models";
         $content = $this->getModelContent();
 
@@ -44,8 +45,8 @@ class Builder
     public function generateController()
     {
         console_log("Generating Controller named $this->name.");
-        $dir = Application::getInstance()->basePath() . "/app/controllers";
 
+        $dir = Application::getInstance()->basePath() . "/app/controllers";
         $content = $this->getControllerContent();
 
         $this->createFile($dir, $this->name, $content);
@@ -54,8 +55,8 @@ class Builder
     public function generateMiddleware()
     {
         console_log("Generating Middleware named $this->name.");
-        $dir = Application::getInstance()->basePath() . "/app/middlewares";
 
+        $dir = Application::getInstance()->basePath() . "/app/middlewares";
         $content = $this->getMiddlewareContent();
 
         $this->createFile($dir, $this->name, $content);
@@ -64,8 +65,8 @@ class Builder
     public function generateCommand()
     {
         console_log("Generating Command named $this->name.");
-        $dir = Application::getInstance()->basePath() . "/app/commands";
 
+        $dir = Application::getInstance()->basePath() . "/app/commands";
         $content = $this->getCommandContent();
 
         $this->createFile($dir, $this->name, $content);
@@ -93,10 +94,12 @@ class Builder
         return "<?php
 
 namespace App\Models;
+
 use Core\Model\Model;
 
-class $this->name extends Model {
-
+class $this->name extends Model
+{
+    //
 }";
     }
 
@@ -106,11 +109,11 @@ class $this->name extends Model {
 
 namespace App\Controllers;
 
-class $this->name {
-
+class $this->name
+{
     public function index()
     {
-
+        //
     }
 }";
     }
@@ -124,7 +127,8 @@ namespace App\Middlewares;
 use Closure;
 use Core\Request\Request;
 
-class $this->name {
+class $this->name
+{
     public function handle(Request \$request, Closure \$next)
     {
         return \$next(\$request);
@@ -141,13 +145,13 @@ namespace App\Commands;
 use Core\Console\Command;
 use Core\Console\Commander;
 
-class $this->name extends Command {
-
+class $this->name extends Command
+{
     protected \$key = \"command_name\";
 
     public function handle(Commander \$commander)
     {
-         //handle command here!
+         // handle command here!
     }
 }";
     }
