@@ -42,6 +42,14 @@ In fact, you are encouraged not just to follow the path but to venture off the b
 
 ## Documentation
 
+#### Explore the essentials and unlock the full potential of Elemental through detailed guides and tutorials on the [**Documentation**](https://elemental.anees.dev) website.
+
+#### For an exhaustive reference guide, explore the [**API Documentation**](https://aneesmuzzafer.github.io/elemental) to gain insights into Elemental's API.
+
+  ---
+
+### Content
+
  1. [Getting Started](#getting-started)
  2. [Dependency Injection Container](#dependency-injection-container)
  3. [Routing](#routing)
