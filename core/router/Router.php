@@ -14,7 +14,7 @@ class Router
         "POST" => [],
         "PATCH" => [],
         "PUT"   => [],
-        "DEL" => [],
+        "DELETE" => [],
         "HEAD" => [],
     ];
 
@@ -171,7 +171,7 @@ class Router
 
     public function delete(string $uri, array | callable $action): Route
     {
-        return $this->generateRoute("'DELETE'", $uri, $action);
+        return $this->generateRoute("DELETE", $uri, $action);
     }
 
     public function head(string $uri, array | callable $action): Route
@@ -188,12 +188,21 @@ class Router
 
     public function group(array $attributes, callable $callback)
     {
-        $prevAttributes =  $this->getAttributes();
+        $prevAttributes = $this->getAttributes();
 
         $this->setAttributes(array_merge_recursive($prevAttributes, $attributes));
 
         $callback();
 
         $this->setAttributes($prevAttributes);
+    }
+
+    public function apiResource(string $uri, $controller)
+    {
+        $this->get($uri, [$controller, "index"]);
+        $this->post($uri, [$controller, "store"]);
+        $this->get($uri . "/{id}", [$controller, "show"]);
+        $this->put($uri . "/{id}", [$controller, "update"]);
+        $this->delete($uri . "/{id}", [$controller, "destroy"]);
     }
 }
