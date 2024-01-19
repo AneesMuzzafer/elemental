@@ -32,8 +32,7 @@ class Helper
         console_log("===============\n");
 
         foreach ($commands as $key => $command) {
-            $desc = $command->getDescription();
-            console_log(self::greenText("php candle $key") . " \t\t\t $desc");
+            console_log(self::greenText("php candle $key") . " \t\t\t " . $command->getDescription());
         }
     }
 
