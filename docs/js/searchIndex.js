@@ -46,6 +46,26 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Controllers-UserController.html#method_index"
         },                {
+            "fqsen": "\\App\\Controllers\\UserController\u003A\u003Astore\u0028\u0029",
+            "name": "store",
+            "summary": "",
+            "url": "classes/App-Controllers-UserController.html#method_store"
+        },                {
+            "fqsen": "\\App\\Controllers\\UserController\u003A\u003Ashow\u0028\u0029",
+            "name": "show",
+            "summary": "",
+            "url": "classes/App-Controllers-UserController.html#method_show"
+        },                {
+            "fqsen": "\\App\\Controllers\\UserController\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "",
+            "url": "classes/App-Controllers-UserController.html#method_update"
+        },                {
+            "fqsen": "\\App\\Controllers\\UserController\u003A\u003Adestroy\u0028\u0029",
+            "name": "destroy",
+            "summary": "",
+            "url": "classes/App-Controllers-UserController.html#method_destroy"
+        },                {
             "fqsen": "\\App\\Exceptions\\Handler",
             "name": "Handler",
             "summary": "",
@@ -1325,6 +1345,11 @@ Search.appendIndex(
             "name": "group",
             "summary": "",
             "url": "classes/Core-Router-Router.html#method_group"
+        },                {
+            "fqsen": "\\Core\\Router\\Router\u003A\u003AapiResource\u0028\u0029",
+            "name": "apiResource",
+            "summary": "",
+            "url": "classes/Core-Router-Router.html#method_apiResource"
         },                {
             "fqsen": "\\Core\\Router\\Router\u003A\u003A\u0024routes",
             "name": "routes",
