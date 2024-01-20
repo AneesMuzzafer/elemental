@@ -9,8 +9,10 @@ class Builder
     private string $name = "";
     private bool $forceCreate = false;
 
-    private bool $isApiController = false;
-    private ?string $associatedModel = null;
+    private array $controllerConfig = [
+        'api' => false,
+        'model' => null,
+    ];
 
     const BUILD_MODEL = "build:model";
     const BUILD_CONTROLLER = "build:controller";
@@ -31,14 +33,14 @@ class Builder
 
             if ($this->resource == self::BUILD_CONTROLLER) {
                 if ($arg == "--api") {
-                    $this->isApiController = true;
+                    $this->controllerConfig['api'] = true;
                 }
 
                 if (str_starts_with($arg, "--model=")) {
-                    $this->associatedModel = explode("=", $arg)[1];
+                    $this->controllerConfig['model'] = explode("=", $arg)[1];
 
-                    if (!file_exists(Application::getInstance()->basePath() . "/app/models/" . $this->associatedModel . ".php")) {
-                        console_log(Helper::redText("Error: The specified model (") . Helper::yellowText($this->associatedModel) . Helper::redText(") does not exist."));
+                    if (!file_exists(Application::getInstance()->basePath() . "/app/models/" . $this->controllerConfig['model'] . ".php")) {
+                        console_log(Helper::redText("Error: The specified model (") . Helper::yellowText($this->controllerConfig['model']) . Helper::redText(") does not exist."));
                         exit(1);
                     }
                 }
@@ -150,15 +152,15 @@ class $this->name extends Model
 
     private function getControllerContent()
     {
-        if ($this->isApiController) {
-            $modelParameter = is_null($this->associatedModel) ? "int \$id" : "$this->associatedModel $" . lcfirst($this->associatedModel);
+        if ($this->controllerConfig['api']) {
+            $modelParameter = is_null($this->controllerConfig['model']) ? "int \$id" : $this->controllerConfig['model'] . " $" . lcfirst($this->controllerConfig['model']);
 
             return "<?php
 
 namespace App\Controllers;
 
 use Core\Request\Request;
-" . (!is_null($this->associatedModel) ? "use App\Models\\" . $this->associatedModel . ";\n" : "") . "
+" . (!is_null($this->controllerConfig['model']) ? "use App\Models\\" . $this->controllerConfig['model'] . ";\n" : "") . "
 class $this->name
 {
     public function index()
