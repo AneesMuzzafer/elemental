@@ -33,7 +33,6 @@ class WebEngine implements WebEngineContract
                     return $this->process($route, $args);
                 })->execute();
         } catch (\Throwable $e) {
-
             $response = $this->app->make(Handler::class)->handleException($e);
         }
 

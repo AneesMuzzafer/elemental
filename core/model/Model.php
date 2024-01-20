@@ -36,6 +36,7 @@ class Model
     public static function create(array $data)
     {
         $model = new static();
+
         foreach ($data as $column => $value) {
             $model->data[$column] = $value;
         }
@@ -46,6 +47,7 @@ class Model
     public static function find($id)
     {
         $model = new static();
+
         return $model->getFromPrimaryKey($id);
     }
 
