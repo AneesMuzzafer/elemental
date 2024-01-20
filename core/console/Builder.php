@@ -128,7 +128,7 @@ class Builder
             fwrite($file, $content);
             fclose($file);
 
-            console_log(Helper::greenText("File ") . Helper::purpleText("$filename.php") . Helper::greenText(" created successfully at ") . Helper::purpleText($dir));
+            console_log(Helper::greenText(ucfirst(explode(":", $this->resource)[1]) . " created successfully at ") . Helper::purpleText($filePath));
         } else {
             console_log(Helper::redText("Error: Unable to create the file."));
             exit(1);
