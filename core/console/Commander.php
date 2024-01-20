@@ -42,6 +42,10 @@ class Commander
             return new Helper($this->commands);
         }
 
+        if ($command === "list") {
+            return new Helper($this->commands);
+        }
+
         if (in_array($command, Builder::BUILD_COMMANDS)) {
             return new Builder($command, $this->args);
         }

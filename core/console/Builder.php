@@ -9,10 +9,21 @@ class Builder
     private string $name = "";
     private bool $forceCreate = false;
 
-    private bool $isApiController = false;
-    private ?string $associatedModel = null;
+    private array $modelConfig = [
+        'api' => false,
+        'controller' => false,
+    ];
+    private array $controllerConfig = [
+        'api' => false,
+        'model' => null,
+    ];
 
-    const BUILD_COMMANDS = ["build:model", "build:controller", "build:middleware", "build:command"];
+    const BUILD_MODEL = "build:model";
+    const BUILD_CONTROLLER = "build:controller";
+    const BUILD_MIDDLEWARE = "build:middleware";
+    const BUILD_COMMAND = "build:command";
+
+    const BUILD_COMMANDS = [self::BUILD_MODEL, self::BUILD_CONTROLLER, self::BUILD_MIDDLEWARE, self::BUILD_COMMAND];
 
     public function __construct(private string $resource, private array $args)
     {
@@ -24,16 +35,26 @@ class Builder
                 continue;
             }
 
-            if ($this->resource == self::BUILD_COMMANDS[1]) {
+            if ($this->resource == self::BUILD_MODEL) {
                 if ($arg == "--api") {
-                    $this->isApiController = true;
+                    $this->modelConfig['api'] = true;
+                }
+
+                if ($arg == "-c") {
+                    $this->modelConfig['controller'] = true;
+                }
+            }
+
+            if ($this->resource == self::BUILD_CONTROLLER) {
+                if ($arg == "--api") {
+                    $this->controllerConfig['api'] = true;
                 }
 
                 if (str_starts_with($arg, "--model=")) {
-                    $this->associatedModel = explode("=", $arg)[1];
+                    $this->controllerConfig['model'] = explode("=", $arg)[1];
 
-                    if (!file_exists(Application::getInstance()->basePath() . "/app/models/" . $this->associatedModel . ".php")) {
-                        console_log(Helper::redText("Error: The specified model (") . Helper::yellowText($this->associatedModel) . Helper::redText(") does not exist."));
+                    if (!file_exists(Application::getInstance()->basePath() . "/app/models/" . $this->controllerConfig['model'] . ".php")) {
+                        console_log(Helper::redText("Error: The specified model (") . Helper::yellowText($this->controllerConfig['model']) . Helper::redText(") does not exist."));
                         exit(1);
                     }
                 }
@@ -55,13 +76,13 @@ class Builder
     public function generateResource()
     {
         switch ($this->resource) {
-            case self::BUILD_COMMANDS[0]:
+            case self::BUILD_MODEL:
                 return $this->generateModel();
-            case self::BUILD_COMMANDS[1]:
+            case self::BUILD_CONTROLLER:
                 return $this->generateController();
-            case self::BUILD_COMMANDS[2]:
+            case self::BUILD_MIDDLEWARE:
                 return $this->generateMiddleware();
-            case self::BUILD_COMMANDS[3]:
+            case self::BUILD_COMMAND:
                 return $this->generateCommand();
         }
     }
@@ -74,6 +95,18 @@ class Builder
         $content = $this->getModelContent();
 
         $this->createFile($dir, $this->name, $content);
+
+        if ($this->modelConfig['controller'] || $this->modelConfig['api']) {
+            $args = ["--model=" . $this->name];
+
+            if ($this->modelConfig['api']) {
+                $args[] = "--api";
+            }
+
+            $args[] = $this->name . "Controller";
+
+            return new Builder(self::BUILD_CONTROLLER, $args);
+        }
     }
 
     public function generateController()
@@ -121,7 +154,7 @@ class Builder
             fwrite($file, $content);
             fclose($file);
 
-            console_log(Helper::greenText("File ") . Helper::purpleText("$filename.php") . Helper::greenText(" created successfully at ") . Helper::purpleText($dir));
+            console_log(Helper::greenText(ucfirst(explode(":", $this->resource)[1]) . " created successfully at ") . Helper::purpleText($filePath));
         } else {
             console_log(Helper::redText("Error: Unable to create the file."));
             exit(1);
@@ -145,15 +178,15 @@ class $this->name extends Model
 
     private function getControllerContent()
     {
-        if ($this->isApiController) {
-            $modelParameter = is_null($this->associatedModel) ? "int \$id" : "$this->associatedModel $" . lcfirst($this->associatedModel);
+        if ($this->controllerConfig['api']) {
+            $modelParameter = is_null($this->controllerConfig['model']) ? "int \$id" : $this->controllerConfig['model'] . " $" . lcfirst($this->controllerConfig['model']);
 
             return "<?php
 
 namespace App\Controllers;
 
 use Core\Request\Request;
-" . (!is_null($this->associatedModel) ? "use App\Models\\" . $this->associatedModel . ";\n" : "") . "
+" . (!is_null($this->controllerConfig['model']) ? "use App\Models\\" . $this->controllerConfig['model'] . ";\n" : "") . "
 class $this->name
 {
     public function index()
