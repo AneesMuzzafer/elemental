@@ -12,7 +12,12 @@ class Builder
     private bool $isApiController = false;
     private ?string $associatedModel = null;
 
-    const BUILD_COMMANDS = ["build:model", "build:controller", "build:middleware", "build:command"];
+    const BUILD_MODEL = "build:model";
+    const BUILD_CONTROLLER = "build:controller";
+    const BUILD_MIDDLEWARE = "build:middleware";
+    const BUILD_COMMAND = "build:command";
+
+    const BUILD_COMMANDS = [self::BUILD_MODEL, self::BUILD_CONTROLLER, self::BUILD_MIDDLEWARE, self::BUILD_COMMAND];
 
     public function __construct(private string $resource, private array $args)
     {
@@ -24,7 +29,7 @@ class Builder
                 continue;
             }
 
-            if ($this->resource == self::BUILD_COMMANDS[1]) {
+            if ($this->resource == self::BUILD_CONTROLLER) {
                 if ($arg == "--api") {
                     $this->isApiController = true;
                 }
@@ -55,13 +60,13 @@ class Builder
     public function generateResource()
     {
         switch ($this->resource) {
-            case self::BUILD_COMMANDS[0]:
+            case self::BUILD_MODEL:
                 return $this->generateModel();
-            case self::BUILD_COMMANDS[1]:
+            case self::BUILD_CONTROLLER:
                 return $this->generateController();
-            case self::BUILD_COMMANDS[2]:
+            case self::BUILD_MIDDLEWARE:
                 return $this->generateMiddleware();
-            case self::BUILD_COMMANDS[3]:
+            case self::BUILD_COMMAND:
                 return $this->generateCommand();
         }
     }
