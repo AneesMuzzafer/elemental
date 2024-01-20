@@ -76,6 +76,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Exceptions-Handler.html#method_handle"
         },                {
+            "fqsen": "\\App\\Middlewares\\AllowCORS",
+            "name": "AllowCORS",
+            "summary": "",
+            "url": "classes/App-Middlewares-AllowCORS.html"
+        },                {
+            "fqsen": "\\App\\Middlewares\\AllowCORS\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "",
+            "url": "classes/App-Middlewares-AllowCORS.html#method_handle"
+        },                {
             "fqsen": "\\App\\Middlewares\\Logger",
             "name": "Logger",
             "summary": "",
