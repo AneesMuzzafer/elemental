@@ -25,7 +25,7 @@ class Helper
         console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("-c") . Helper::blueText(" to create a controller for the model."));
         console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("--api") . Helper::blueText(" to create an API controller."));
         console_log(self::greenText("php candle build:controller [name] --model=[model] --api -f") . "\n\t\t\t\t\t\t Build a Controller class with the specified name.");
-        console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("--model=[model]") . Helper::blueText(" to set the model name for the controller."));
+        console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("--model=[model]") . Helper::blueText(" to set the model for the controller."));
         console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("--api") . Helper::blueText(" to create an API controller."));
         console_log(self::greenText("php candle build:middleware [name] -f") . "\t\t Build a Middleware class with the specified name.");
         console_log(self::greenText("php candle build:command [name] -f") . "\t\t Build a Command class with the specified name.");
