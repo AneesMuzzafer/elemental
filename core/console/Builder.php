@@ -9,6 +9,10 @@ class Builder
     private string $name = "";
     private bool $forceCreate = false;
 
+    private array $modelConfig = [
+        'api' => false,
+        'controller' => false,
+    ];
     private array $controllerConfig = [
         'api' => false,
         'model' => null,
@@ -29,6 +33,16 @@ class Builder
             if ($arg == "-f") {
                 $this->forceCreate = true;
                 continue;
+            }
+
+            if ($this->resource == self::BUILD_MODEL) {
+                if ($arg == "--api") {
+                    $this->modelConfig['api'] = true;
+                }
+
+                if ($arg == "-c") {
+                    $this->modelConfig['controller'] = true;
+                }
             }
 
             if ($this->resource == self::BUILD_CONTROLLER) {
@@ -81,6 +95,18 @@ class Builder
         $content = $this->getModelContent();
 
         $this->createFile($dir, $this->name, $content);
+
+        if ($this->modelConfig['controller'] || $this->modelConfig['api']) {
+            $args = [];
+
+            if ($this->modelConfig['api']) {
+                $args[] = "--api";
+            }
+
+            $args[] = $this->name . "Controller";
+
+            return new Builder(self::BUILD_CONTROLLER, $args);
+        }
     }
 
     public function generateController()
