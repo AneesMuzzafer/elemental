@@ -18,8 +18,8 @@ class Helper
 
         console_log(self::greenText("php candle ignite") . " \t\t\t\t Start the PHP server at default address & available port.");
         console_log(self::greenText("php candle ignite --host=[]") . " \t\t\t Start the PHP server at specified host address.");
-        console_log(self::greenText("php candle ignite --port-[]") . " \t\t\t Start the PHP server at specified port.");
-        console_log(self::greenText("php candle ignite --host=[] --port-[]") . " \t\t Start the PHP server at specified host address & port.\n");
+        console_log(self::greenText("php candle ignite --port=[]") . " \t\t\t Start the PHP server at specified port.");
+        console_log(self::greenText("php candle ignite --host=[] --port=[]") . " \t\t Start the PHP server at specified host address & port.\n");
 
         console_log(self::greenText("php candle build:model [name] -c --api -f") . "\t Build a Model class with the specified name.");
         console_log(self::blueText("\t\t\t\t\t\t Use ") . Helper::yellowText("-c") . Helper::blueText(" to create a controller for the model."));
