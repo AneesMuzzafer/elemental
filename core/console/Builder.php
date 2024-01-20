@@ -97,7 +97,7 @@ class Builder
         $this->createFile($dir, $this->name, $content);
 
         if ($this->modelConfig['controller'] || $this->modelConfig['api']) {
-            $args = [];
+            $args = ["--model=" . $this->name];
 
             if ($this->modelConfig['api']) {
                 $args[] = "--api";
