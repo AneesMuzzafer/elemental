@@ -18,8 +18,6 @@ Elemental is a PHP framework developed from scratch for dynamic, user-friendly c
 - [Facades](#facades)
 - [No External Dependency](#why-choose-elemental)
 
-
-
 ## Demo - Inkwell
 
 To showcase the capabilities of Elemental, a fully working platform called **[Inkwell](https://inkwell.anees.dev)** has been developed using Elemental. Inkwell is a unique space dedicated to the pure essence of storytelling. In line with Elemental's goal of having no external dependencies, Inkwell has been crafted using plain HTML, CSS, JS, and PHP only.
@@ -30,7 +28,6 @@ To showcase the capabilities of Elemental, a fully working platform called **[In
 Feel free to delve into both the live platform and the corresponding codebase. Explore Inkwell's features to understand how Elemental can be harnessed for your own projects.
 
 See the [inspiration](#inspiration) behind the creation of **Elemental**.
-
 
 ## Why Choose Elemental?
 
@@ -46,7 +43,7 @@ In fact, you are encouraged not just to follow the path but to venture off the b
 
 #### For an exhaustive reference guide, explore the [**API Documentation**](https://aneesmuzzafer.github.io/elemental) to gain insights into Elemental's API.
 
- ___
+---
 
 ### Content
 
@@ -65,7 +62,6 @@ In fact, you are encouraged not just to follow the path but to venture off the b
  13. [Exception Handler](#exception-handler)
  14. [Configuration](#configuration)
  15. [Facades](#facades)
-
 
 ## Getting Started
 
