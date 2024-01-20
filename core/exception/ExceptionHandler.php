@@ -21,15 +21,19 @@ class ExceptionHandler
         if ($e instanceof RouteNotFoundException) {
             $response = $this->response->setContent($this->formatErrorMessage($e, "Route Not Found Exception"));
         }
+
         if ($e instanceof ModelNotFoundException) {
             $response = $this->response->setContent($this->formatErrorMessage($e, "Model Not Found Exception"));
         }
+
         if ($e instanceof RouterException) {
             $response = $this->response->setContent($this->formatErrorMessage($e, "Router Exception"));
         }
+
         if ($e instanceof ViewNotFoundException) {
             $response = $this->response->setContent($this->formatErrorMessage($e, "View Not Found Exception"));
         }
+
         if ($e instanceof AppException) {
             $response = $this->response->setContent($this->formatErrorMessage($e, "App Exception"));
         }

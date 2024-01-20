@@ -76,6 +76,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Exceptions-Handler.html#method_handle"
         },                {
+            "fqsen": "\\App\\Middlewares\\AllowCORS",
+            "name": "AllowCORS",
+            "summary": "",
+            "url": "classes/App-Middlewares-AllowCORS.html"
+        },                {
+            "fqsen": "\\App\\Middlewares\\AllowCORS\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "",
+            "url": "classes/App-Middlewares-AllowCORS.html#method_handle"
+        },                {
             "fqsen": "\\App\\Middlewares\\Logger",
             "name": "Logger",
             "summary": "",
@@ -186,20 +196,60 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Core-Console-Builder.html#method_getCommandContent"
         },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003ABUILD_MODEL",
+            "name": "BUILD_MODEL",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#constant_BUILD_MODEL"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003ABUILD_CONTROLLER",
+            "name": "BUILD_CONTROLLER",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#constant_BUILD_CONTROLLER"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003ABUILD_MIDDLEWARE",
+            "name": "BUILD_MIDDLEWARE",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#constant_BUILD_MIDDLEWARE"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003ABUILD_COMMAND",
+            "name": "BUILD_COMMAND",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#constant_BUILD_COMMAND"
+        },                {
             "fqsen": "\\Core\\Console\\Builder\u003A\u003ABUILD_COMMANDS",
             "name": "BUILD_COMMANDS",
             "summary": "",
             "url": "classes/Core-Console-Builder.html#constant_BUILD_COMMANDS"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024name",
+            "name": "name",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#property_name"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024forceCreate",
+            "name": "forceCreate",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#property_forceCreate"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024modelConfig",
+            "name": "modelConfig",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#property_modelConfig"
+        },                {
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024controllerConfig",
+            "name": "controllerConfig",
+            "summary": "",
+            "url": "classes/Core-Console-Builder.html#property_controllerConfig"
         },                {
             "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024resource",
             "name": "resource",
             "summary": "",
             "url": "classes/Core-Console-Builder.html#property_resource"
         },                {
-            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024name",
-            "name": "name",
+            "fqsen": "\\Core\\Console\\Builder\u003A\u003A\u0024args",
+            "name": "args",
             "summary": "",
-            "url": "classes/Core-Console-Builder.html#property_name"
+            "url": "classes/Core-Console-Builder.html#property_args"
         },                {
             "fqsen": "\\Core\\Console\\Command",
             "name": "Command",
@@ -301,6 +351,31 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/Core-Console-Helper.html#method_logAllCommands"
         },                {
+            "fqsen": "\\Core\\Console\\Helper\u003A\u003AgreenText\u0028\u0029",
+            "name": "greenText",
+            "summary": "",
+            "url": "classes/Core-Console-Helper.html#method_greenText"
+        },                {
+            "fqsen": "\\Core\\Console\\Helper\u003A\u003AyellowText\u0028\u0029",
+            "name": "yellowText",
+            "summary": "",
+            "url": "classes/Core-Console-Helper.html#method_yellowText"
+        },                {
+            "fqsen": "\\Core\\Console\\Helper\u003A\u003ApurpleText\u0028\u0029",
+            "name": "purpleText",
+            "summary": "",
+            "url": "classes/Core-Console-Helper.html#method_purpleText"
+        },                {
+            "fqsen": "\\Core\\Console\\Helper\u003A\u003AredText\u0028\u0029",
+            "name": "redText",
+            "summary": "",
+            "url": "classes/Core-Console-Helper.html#method_redText"
+        },                {
+            "fqsen": "\\Core\\Console\\Helper\u003A\u003AblueText\u0028\u0029",
+            "name": "blueText",
+            "summary": "",
+            "url": "classes/Core-Console-Helper.html#method_blueText"
+        },                {
             "fqsen": "\\Core\\Console\\Input",
             "name": "Input",
             "summary": "",
@@ -335,6 +410,11 @@ Search.appendIndex(
             "name": "logRoutes",
             "summary": "",
             "url": "classes/Core-Console-Lister.html#method_logRoutes"
+        },                {
+            "fqsen": "\\Core\\Console\\Lister\u003A\u003AlogAllRoutes\u0028\u0029",
+            "name": "logAllRoutes",
+            "summary": "",
+            "url": "classes/Core-Console-Lister.html#method_logAllRoutes"
         },                {
             "fqsen": "\\Core\\Console\\Lister\u003A\u003A\u0024router",
             "name": "router",

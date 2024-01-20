@@ -31,7 +31,8 @@ class Helper
         console_log(self::greenText("php candle build:command [name] -f") . "\t\t Build a Command class with the specified name.");
         console_log(self::blueText("\n\t\t\t\t\t\t Use ") . Helper::yellowText("-f") . Helper::blueText(" for build commands to overwrite the file when it already exists.\n"));
 
-        console_log(self::greenText("php candle route:list") . " \t\t\t\t List all the routes registered within the App.");
+        console_log(self::greenText("php candle route:list") . " \t\t\t\t List all the registered routes.");
+        console_log(self::greenText("php candle list") . " \t\t\t\t List all the available commands. Alias of " . self::yellowText("php candle help") . ".");
         console_log(self::greenText("php candle help") . " \t\t\t\t List all the available commands.\n");
 
         console_log(self::yellowText("Custom commands"));

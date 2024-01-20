@@ -18,8 +18,6 @@ Elemental is a PHP framework developed from scratch for dynamic, user-friendly c
 - [Facades](#facades)
 - [No External Dependency](#why-choose-elemental)
 
-
-
 ## Demo - Inkwell
 
 To showcase the capabilities of Elemental, a fully working platform called **[Inkwell](https://inkwell.anees.dev)** has been developed using Elemental. Inkwell is a unique space dedicated to the pure essence of storytelling. In line with Elemental's goal of having no external dependencies, Inkwell has been crafted using plain HTML, CSS, JS, and PHP only.
@@ -30,7 +28,6 @@ To showcase the capabilities of Elemental, a fully working platform called **[In
 Feel free to delve into both the live platform and the corresponding codebase. Explore Inkwell's features to understand how Elemental can be harnessed for your own projects.
 
 See the [inspiration](#inspiration) behind the creation of **Elemental**.
-
 
 ## Why Choose Elemental?
 
@@ -46,7 +43,7 @@ In fact, you are encouraged not just to follow the path but to venture off the b
 
 #### For an exhaustive reference guide, explore the [**API Documentation**](https://aneesmuzzafer.github.io/elemental) to gain insights into Elemental's API.
 
- ___
+---
 
 ### Content
 
@@ -65,7 +62,6 @@ In fact, you are encouraged not just to follow the path but to venture off the b
  13. [Exception Handler](#exception-handler)
  14. [Configuration](#configuration)
  15. [Facades](#facades)
-
 
 ## Getting Started
 
@@ -234,9 +230,6 @@ $mailService =  Application::instance()->make(MailService::class);
 
 The `make` method is particularly useful when attempting to resolve a class from within a code component where it's impractical to inject a dependency using type-hinting. In such scenarios, you can explicitly request the application's Dependency Injection Container to resolve an instance for you.
 
-
-
-
 ## Routing
 
 Routes are defined in the `app\routes.php` file, allowing developers to easily register various routes to handle different HTTP requests.
@@ -287,7 +280,6 @@ Route::get("/story/{id}", function ($id) {/*...*/});
 You may define as many route parameters as required by your route:
 
 ```php
-
 Route::post("story/edit/{id}", [StoryController::class, "edit"]);
 
 Route::get("story/{story_id}/comment/{comment_id}", [StoryController::class, "comment"]);
@@ -325,9 +317,7 @@ In the context of routes or controller actions, models are defined using type-hi
 use App\Models\User;
 
 Route::get('/users/{user}', function  (User  $user) {
-
-return  $user->email;
-
+    return  $user->email;
 });
 ```
 
@@ -369,7 +359,6 @@ php candle route:list
 ```
 
 ## Controllers
-
 
 Rather than consolidating all request handling logic within closures in your route files, consider structuring this behavior through "controller" classes. Controllers allow you to organize related request handling logic into a cohesive class. For instance, a `UserController` class could manage various incoming requests related to users, such as displaying, creating, updating, and deleting users. These controller classes are conventionally stored in the `app/Controllers` directory.
 
@@ -485,7 +474,7 @@ class StoryController
 {
     public function update(string $id, Request $request)
     {
-        // Update the story...
+        // Update $story
 
         return redirect("/story/$story->id");
     }
@@ -546,7 +535,7 @@ class StoryController
 {
     public function update(string $id, Request $request)
     {
-        // Update the story...
+        // Update $story
         return redirect("/story/$story->id");
     }
 }
@@ -666,7 +655,7 @@ $xmlData = $request->xml();
 Every route and controller is expected to produce a response for delivery to the user's browser. Elemental offers various methods for generating responses. The simplest form of response involves returning a string directly from a route or controller. The framework will seamlessly convert this string into a complete HTTP response.
 ```php
 Route::get('/', function  () {
-	return  'Hello World';
+	return 'Hello World';
 });
 ```
 
@@ -692,10 +681,10 @@ Route::get('/home', function(Response $response) {
 			->setStatusCode(200)
 			->setContent("Hello World");
 
-	return  response;
+	return $response;
 });
 ```
-You can ofcourse return a `view` from a controller. However,  If you need control over the response's status and headers but also need to return a `view` as the response's content, you can do that as following:
+You can of course return a `view` from a controller. However,  If you need control over the response's status and headers but also need to return a `view` as the response's content, you can do that as following:
 
 ```php
 
@@ -755,7 +744,7 @@ However, for simplicity a helper method `redirect()` is also available globally 
 use Core\Response\Response;
 
 Route::post('/story/create', function  () {
-	if(!some condition)
+	if(!$someCondition)
 		return redirect('/story', 204);
 });
 ```
@@ -773,9 +762,7 @@ Route::post('/post', function  () {
 });
 ```
 
-
 ## Middleware
-
 
 Middleware offers a convenient mechanism to examine and filter incoming HTTP requests to your application. For instance, you can develop middleware to validate the authentication status of your application's user. If the user is not authenticated, the middleware will redirect them to the login screen. Conversely, if the user is authenticated, the middleware will permit the request to advance deeper into the application.
 
@@ -930,7 +917,6 @@ return view('layouts.MainLayout', $data);
 ### Layouts
 
 Elemental provides a convenient way to maintain the same layout across multiple views, reducing code duplication. A layout is itself a view file containing a placeholder `{{ content }}`. When a view is returned with the layout, the final view is compiled by putting the view inside the layout's content.
-
 
 Elemental provides a convenient way to maintain the same layout across multiple views, reducing code duplication. A layout is a view file that incorporates a designated placeholder, denoted by `{{ content }}`. When a view is returned using a specific layout, the composition is achieved by embedding the content of the view within the designated placeholder in the layout. This approach streamlines the organization of views and enhances code maintainability by centralizing common layout elements.
 
@@ -1520,7 +1506,6 @@ class Migration extends Command
 
 ```
 
-
 It is recommended to type-hint dependencies inside the handle method as opposed to inside the constructor of the command class.
 
 To execute these migration commands in the command line:
@@ -1533,7 +1518,6 @@ php candle migrate delete
 As you can see, generating commands are very powerful and can be helpful to achieve a variety of functionalities. Here, a custom migration handler has been built. You can expand and organize the above structure or create a custom Migration Service that can handle your migration logic.
 
 Commands can also be used for handling task scheduling. You may create a command that executes some logic, and then pass the command to your operating systems CRON handler.
-
 
 ## Helpers
 
@@ -1601,10 +1585,7 @@ The `redirect` function returns a redirect HTTP response and is used to redirect
 return  redirect('/home');
 ```
 
-
-
 ## Exception Handler
-
 
 Elemental provides a convenient way to handle all the exceptions thrown by the app.
 
@@ -1703,10 +1684,7 @@ class YourClass {
 
 By doing this, you have a clean and organized way to retrieve configuration values within your application.
 
-
 This approach keeps your configuration centralized and allows for easy changes based on the environment. It also promotes a clean and maintainable codebase.
-
-
 
 ## Facades
 
